@@ -1,0 +1,60 @@
+header {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #5eb0cc;
+    padding: 1rem;
+    flex-wrap: wrap;
+}
+
+.headerLogo {
+    display: flex;
+    align-items: center;
+}
+
+.headerLogo img {
+    width: 120px;
+    margin-right: 10px;
+}
+
+header h1 {
+    color: black;
+    font-size: 1.5rem;
+}
+
+nav {
+    display: flex;
+    align-items: center;
+    flex-wrap: wrap;
+}
+
+nav a {
+    margin-left: 10px;
+    color: white;
+    text-decoration: none;
+    font-weight: bold;
+    transition: color 0.3s ease-in-out;
+    padding: 5px;
+}
+
+nav a:hover, a.active {
+    color: #ED1B24;
+}
+
+/* Mobile styles */
+@media (max-width: 600px) {
+    header {
+        flex-direction: column;
+        align-items: center;
+    }
+
+    nav {
+        flex-direction: column;
+        width: 100%; /* Stack the nav links vertically */
+        margin-top: 10px;
+    }
+
+    nav a {
+        margin: 5px 0;
+    }
+}
