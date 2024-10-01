@@ -522,7 +522,7 @@
 
     async function deleteProduct(id) {
         if (confirm('Are you sure you want to delete this product?')) {
-            const response = await fetch(API_CONFIG.getFullUrl('CATEGORIES')+`/${id}`, {
+            const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS')+`/${id}`, {
                 method: 'DELETE',
                 headers: API_CONFIG.getHeaders()
             });

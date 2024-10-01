@@ -294,9 +294,12 @@
         // const formData = new FormData();
         // formData.append('name', categoryName);
 
+        let headers = API_CONFIG.getHeaders();
+        headers['Content-Type'] = 'application/json';
+
         const response = await fetch(API_CONFIG.getFullUrl('CATEGORIES'), {
             method: 'POST',
-            headers: API_CONFIG.getHeaders(),
+            headers: headers,
             body: JSON.stringify({name: categoryName})
         });
         if (response.status === 401) {
@@ -333,9 +336,12 @@
             const formData = new FormData();
             formData.append('name', newName);
 
+            let headers = API_CONFIG.getHeaders();
+            headers['Content-Type'] = 'application/json';
+
             const response = await fetch(API_CONFIG.getFullUrl('CATEGORIES') + `/${id}`, {
                 method: 'PUT',
-                headers: API_CONFIG.getHeaders(),
+                headers: headers,
                 body: JSON.stringify({name: newName})
             });
             if (response.status === 401) {

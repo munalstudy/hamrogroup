@@ -319,11 +319,13 @@
         // const formData = new FormData();
         // formData.append('name', subCategoryName);
         // formData.append('categoryId', categoryId);
+        let headers = API_CONFIG.getHeaders();
+        headers['Content-Type'] = 'application/json';
 
         const response = await fetch(API_CONFIG.getFullUrl('SUBCATEGORIES'), {
             method: 'POST',
             //Check for JSON content type
-            headers: API_CONFIG.getHeaders(),
+            headers: headers,
             // body: formData
             body: JSON.stringify({
                 name: subCategoryName,
@@ -366,11 +368,12 @@
             // const formData = new FormData();
             // formData.append('name', newName);
             // formData.append('name', newName);
+            let headers = API_CONFIG.getHeaders();
+            headers['Content-Type'] = 'application/json';
 
             const response = await fetch(API_CONFIG.getFullUrl('SUBCATEGORIES') + `/${id}`, {
                 method: 'PUT',
-                //TODO: Check for contentType
-                headers: API_CONFIG.getHeaders(),
+                headers: headers,
                 body: JSON.stringify({
                     name: newName,
                     categoryName: categoryName
