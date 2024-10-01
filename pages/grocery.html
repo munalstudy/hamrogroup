@@ -7,10 +7,113 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <link rel="icon" href="../assets/img/hamrogroup3.png" type="image/icon type">
     <title>Grocery and Takeout Kitchen</title>
-
     <link rel="stylesheet" href="../css/header.css">
     <link rel="stylesheet" href="../css/styles.css">
     <link rel="stylesheet" href="../css/footer.css">
+    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+    <style>
+        body {
+            font-family: 'Roboto', sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #f8f8f8;
+            color: #333;
+        }
+
+        /*header {*/
+        /*    background-color: #1e0202;*/
+        /*    color: #fff;*/
+        /*    padding: 10px 20px;*/
+        /*    display: flex;*/
+        /*    justify-content: space-between;*/
+        /*    align-items: center;*/
+        /*}*/
+
+        /*header nav a {*/
+        /*    color: #fff;*/
+        /*    text-decoration: none;*/
+        /*    margin: 0 15px;*/
+        /*    transition: color 0.3s;*/
+        /*}*/
+
+        /*header nav a:hover {*/
+        /*    color: #d8d8e7;*/
+        /*}*/
+
+        .product-container {
+            padding: 20px;
+        }
+
+        .category-section {
+            margin-bottom: 40px;
+            padding: 20px;
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+        }
+
+        .subcategory-section {
+            margin-top: 20px;
+        }
+
+        .product-grid {
+            display: flex; /* Use flexbox for alignment */
+            flex-wrap: wrap; /* Allow items to wrap to the next line */
+            justify-content: center; /* Center items horizontally */
+            gap: 20px; /* Space between items */
+            background-color: #d8d8e7;
+            padding: 20px;
+        }
+
+        .product-card {
+            flex: 0 0 200px; /* Set a fixed width for each card */
+            border: 1px solid #1e0202;
+            border-radius: 8px;
+            background-color: #fff;
+            padding: 10px;
+            text-align: center; /* Center text within the card */
+        }
+
+
+        .product-card:hover {
+            transform: translateY(-5px);
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+        }
+
+        .product-card img {
+            max-width: 100%;
+            border-radius: 8px;
+        }
+
+        h3, h2 {
+            color: #1e0202;
+        }
+
+        h3 {
+            margin: 10px 0;
+        }
+
+        /*.footerLogo {*/
+        /*    max-width: 150px;*/
+        /*    margin-bottom: 10px;*/
+        /*}*/
+
+        /*.social ul {*/
+        /*    list-style: none;*/
+        /*    padding: 0;*/
+        /*}*/
+
+        /*.social li {*/
+        /*    display: inline;*/
+        /*    margin-right: 10px;*/
+        /*}*/
+
+        /*.map iframe {*/
+        /*    width: 100%;*/
+        /*    height: 400px;*/
+        /*    border: 0;*/
+        /*}*/
+    </style>
 </head>
 
 <body>
@@ -29,9 +132,7 @@
 </header>
 
 <main>
-    <section class="content">
-        <p>This is the body content of the grocery and takeout kitchen.</p>
-    </section>
+    <section class="product-container" id="productContainer"></section>
 </main>
 
 <footer>
@@ -39,7 +140,6 @@
         <span>Hotline: 4168298697</span>
     </div>
     <div class="company-info">
-        <!--        <img class="footerLogo" src="../assets/img/hamrogroup.jpeg" alt="Company Logo" />-->
         <img class="footerLogo" src="../assets/img/hamrogroup3.png" alt="Company Logo"/>
         <h3>Hamro Group</h3>
         <p>21B Brenda Cres, Scarborough, ON, Canada</p>
@@ -64,11 +164,99 @@
     </div>
     <div class="map">
         <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5767.278665315341!2d-79.26273492488535!3d43.71804384823607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4ce4426940e3b%3A0x9c9bd9f976631ad8!2s21B%20Brenda%20Crescent%2C%20Toronto%2C%20ON%20M1K%203C3!5e0!3m2!1sen!2sca!4v1727014812302!5m2!1sen!2sca"
-                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                allowfullscreen="" loading="lazy"
                 referrerpolicy="no-referrer-when-downgrade"></iframe>
     </div>
 </footer>
 
-</body>
 <script src="../js/scripts.js"></script>
+<script>
+    async function displayProducts() {
+        const response = await fetch('http://localhost:3000/api/products', {
+            headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+        });
+        const products = await response.json();
+
+        const productContainer = document.getElementById('productContainer');
+
+        // Group products by category
+        const groupedProducts = products.reduce((acc, product) => {
+            if (!acc[product.category]) {
+                acc[product.category] = [];
+            }
+            acc[product.category].push(product);
+            return acc;
+        }, {});
+
+        // Create category sections
+        for (const [category, items] of Object.entries(groupedProducts)) {
+            const categorySection = document.createElement('div');
+            categorySection.classList.add('category-section');
+
+            const categoryTitle = document.createElement('h2');
+            categoryTitle.textContent = category;
+            categorySection.appendChild(categoryTitle);
+
+            const subcategoryContainer = document.createElement('div');
+            subcategoryContainer.classList.add('subcategory-container');
+
+            // Group by subcategory
+            const groupedSubcategories = items.reduce((acc, item) => {
+                if (!acc[item.subcategory]) {
+                    acc[item.subcategory] = [];
+                }
+                acc[item.subcategory].push(item);
+                return acc;
+            }, {});
+
+            // Create subcategory sections
+            for (const [subcategory, subItems] of Object.entries(groupedSubcategories)) {
+                const subcategorySection = document.createElement('div');
+                subcategorySection.classList.add('subcategory-section');
+
+                const subcategoryTitle = document.createElement('h3');
+                subcategoryTitle.textContent = subcategory;
+                subcategorySection.appendChild(subcategoryTitle);
+
+                const productGrid = document.createElement('div');
+                productGrid.classList.add('product-grid');
+
+                // Create product cards
+                subItems.forEach(product => {
+                    const productCard = document.createElement('div');
+                    productCard.classList.add('product-card');
+
+                    const productImage = document.createElement('img');
+                    productImage.src = product.image_path;
+                    productImage.alt = product.name;
+
+                    const productName = document.createElement('h4');
+                    productName.textContent = product.name;
+
+                    const productDetails = document.createElement('p');
+                    productDetails.textContent = product.small_details;
+
+                    const productPrice = document.createElement('p');
+                    productPrice.textContent = `$${product.price}`;
+
+                    productCard.appendChild(productImage);
+                    productCard.appendChild(productName);
+                    productCard.appendChild(productDetails);
+                    productCard.appendChild(productPrice);
+                    productGrid.appendChild(productCard);
+                });
+
+                subcategorySection.appendChild(productGrid);
+                subcategoryContainer.appendChild(subcategorySection);
+            }
+
+            categorySection.appendChild(subcategoryContainer);
+            productContainer.appendChild(categorySection);
+        }
+    }
+
+    displayProducts();
+</script>
+</body>
+
 </html>
