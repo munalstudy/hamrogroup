@@ -130,10 +130,11 @@
 </footer>
 
 <script src="../js/scripts.js"></script>
+<script src="../js/config.js"></script>
 <script>
     async function displayProducts() {
-        const response = await fetch('http://localhost:3000/api/products', {
-            headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+        const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS'), {
+            headers: API_CONFIG.getHeaders()
         });
         const products = await response.json();
 

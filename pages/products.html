@@ -297,10 +297,11 @@
     </div>
 </footer>
 <script src="../js/scripts.js"></script>
+<script src="../js/config.js"></script>
 <script>
     async function loadCategories() {
-        const response = await fetch('http://localhost:3000/api/categories', {
-            headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+        const response = await fetch(API_CONFIG.getFullUrl('CATEGORIES'), {
+            headers: API_CONFIG.getHeaders()
         });
         if (response.status === 401) {
             // Token is invalid, redirect to login.html
@@ -324,8 +325,8 @@
         const subcategorySelect = document.getElementById('add-subcategory');
 
         if (categoryId) {
-            const response = await fetch(`http://localhost:3000/api/subcategories/getByCategoryId/${categoryId}`, {
-                headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+            const response = await fetch(API_CONFIG.getFullUrl('SUBCATEGORIES') + `/getByCategoryId/${categoryId}`, {
+                headers: API_CONFIG.getHeaders()
             });
             if (response.status === 401) {
                 // Token is invalid, redirect to login.html
@@ -378,12 +379,10 @@
             formData.append('image', newImage);
         }
 
-        const response = await fetch('http://localhost:3000/api/products', {
+        const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS'), {
             method: 'POST',
             body: formData,
-            headers: {
-                'Authorization': `Bearer ${localStorage.getItem('token')}`
-            }
+            headers: API_CONFIG.getHeaders()
         });
 
         if (response.status === 401) {
@@ -398,8 +397,8 @@
 
     // Fetch and display products
     async function loadProducts() {
-        const response = await fetch('http://localhost:3000/api/products', {
-            headers: {'Authorization': `Bearer ${localStorage.getItem('token')}`}
+        const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS'), {
+            headers: API_CONFIG.getHeaders()
         });
         if (response.status === 401) {
             // Token is invalid, redirect to login.html
@@ -428,9 +427,8 @@
 
     // View Product Modal Logic
     async function viewProduct(id) {
-        const token = localStorage.getItem('token');
-        const response = await fetch(`http://localhost:3000/api/products/${id}`, {
-            headers: {'Authorization': `Bearer ${token}`}
+        const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS')+`/${id}`, {
+            headers: API_CONFIG.getHeaders()
         });
 
         if (response.status === 401) {
@@ -502,12 +500,10 @@
                 formData.append('image', newImage);
             }
 
-            const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+            const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS')+`/${id}`, {
                 method: 'PUT',
                 body: formData,
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
+                headers: API_CONFIG.getHeaders()
             });
 
             if (response.status === 401) {
@@ -526,11 +522,9 @@
 
     async function deleteProduct(id) {
         if (confirm('Are you sure you want to delete this product?')) {
-            const response = await fetch(`http://localhost:3000/api/products/${id}`, {
+            const response = await fetch(API_CONFIG.getFullUrl('CATEGORIES')+`/${id}`, {
                 method: 'DELETE',
-                headers: {
-                    'Authorization': `Bearer ${localStorage.getItem('token')}`
-                }
+                headers: API_CONFIG.getHeaders()
             });
             if (response.status === 401) {
                 // Token is invalid, redirect to login.html
