@@ -1,0 +1,24 @@
+/* Toast Styles (Similar to Before) */
+.toast {
+    display: flex;
+    align-items: center;
+    justify-content: space-between;
+    background-color: #333;
+    color: white;
+    padding: 12px 24px;
+    border-radius: 5px;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    margin-top: 10px;
+    opacity: 0;
+    transform: translateX(100%);
+    animation: slideIn 0.3s forwards;
+}
+
+.toast button {
+    background: none;
+    border: none;
+    color: white;
+    font-weight: bold;
+    cursor: pointer;
+    margin-left: 10px;
+}

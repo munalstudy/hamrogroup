@@ -1,0 +1,372 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Manage Categories</title>
+    <link rel="stylesheet" href="../css/header.css">
+    <link rel="stylesheet" href="../css/styles.css">
+    <link rel="stylesheet" href="../css/footer.css">
+    <style>
+        .category-container {
+            padding: 20px;
+            overflow-x: auto; /* Allow horizontal scrolling */
+        }
+
+        body {
+            font-family: Arial, sans-serif;
+            margin: 0;
+            padding: 0;
+            box-sizing: border-box;
+        }
+
+
+        .product-container {
+            padding: 20px;
+            overflow-x: auto; /* Allow horizontal scrolling */
+        }
+
+        h2 {
+            color: #2c3e50;
+        }
+
+        table {
+            width: 100%;
+            border-collapse: collapse;
+            margin: 20px 0;
+        }
+
+        th, td {
+            padding: 10px;
+            border: 1px solid #ddd;
+            text-align: left;
+        }
+
+        th {
+            background-color: #2c3e50;
+            color: white;
+        }
+
+        /* Responsive Modal Styles */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 9999;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0, 0, 0, 0.5);
+            justify-content: center;
+            align-items: center;
+        }
+
+        .modal-content {
+            background-color: white;
+            padding: 20px;
+            border-radius: 10px;
+            width: 90%; /* Default width for mobile */
+            max-width: 600px; /* Maximum width for larger screens */
+            text-align: center;
+            position: relative;
+        }
+
+        .close {
+            position: absolute;
+            top: 10px;
+            right: 20px;
+            font-size: 24px;
+            cursor: pointer;
+        }
+
+        .modal img {
+            /*width: 100%; !* Make image responsive *!*/
+            height: auto;
+            margin-bottom: 20px;
+        }
+
+        /* Toast Styles */
+        #toast-container {
+            position: fixed;
+            bottom: 20px;
+            right: 20px;
+            z-index: 10000;
+        }
+
+        .toast {
+            background-color: #333;
+            color: white;
+            padding: 10px;
+            margin: 5px;
+            border-radius: 5px;
+        }
+
+        .add-btn {
+            float: right;
+            padding: 10px 20px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .view-btn, .edit-btn, .delete-btn {
+            /*float: right;*/
+            margin: 2px;
+            padding: 5px 10px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .backPages {
+            padding: 20px;
+            overflow-x: auto;
+        }
+
+        .backToProducts, .backToSubCategory {
+            /*float: right;*/
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+        .backButtonsLink {
+            color: white;
+            text-decoration: none;
+        }
+
+        .add-btn:hover, .view-btn:hover, .edit-btn:hover, .delete-btn:hover, .backToProducts:hover, .backToSubCategory:hover {
+            background-color: #1a252f;
+        }
+    </style>
+</head>
+<body>
+
+<header>
+    <div class="headerLogo">
+        <img src="../assets/img/hamrogroup3.png" alt="Company Logo"/>
+        <h1>Hamro Group</h1>
+    </div>
+    <nav>
+        <a href="main.html">Home</a>
+        <a href="grocery.html">Grocery and Takeout Kitchen</a>
+        <a href="renovation.html">Renovation and Building Services</a>
+        <a href="staffing.html">Staffing Services</a>
+        <a href="consulting.html">Business Consulting</a>
+    </nav>
+</header>
+<div class="backPages">
+    <a href="subcategories.html" class="backButtonsLink"><button class="backToSubCategory">Go to SubCategory Page</button></a>
+    <a href="products.html" class="backButtonsLink"><button class="backToProducts">Go to Products Page</button></a>
+</div>
+<div class="category-container">
+    <button id="addCategoryBtn" class="add-btn">Add Category</button>
+    <h2>Category</h2>
+    <table id="category-table">
+        <thead>
+        <tr>
+            <th>Name</th>
+            <th>Actions</th>
+        </tr>
+        </thead>
+        <tbody>
+        </tbody>
+    </table>
+</div>
+
+<!-- Add Category Modal -->
+<div id="addModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="addModalClose">&times;</span>
+        <h2>Add New Category</h2>
+        <form id="add-form">
+            <label>Category Name: <input type="text" id="add-name"></label><br/>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
+
+<!-- Edit Category Modal -->
+<div id="editModal" class="modal">
+    <div class="modal-content">
+        <span class="close" id="editModalClose">&times;</span>
+        <h2>Edit Category</h2>
+        <form id="edit-form">
+            <label>Category Name: <input type="text" id="edit-name"></label><br/>
+            <button type="submit">Save</button>
+        </form>
+    </div>
+</div>
+
+<!-- Toast Container for Notifications -->
+<div id="toast-container"></div>
+
+<footer>
+    <div class="floating-button">
+        <span>Hotline: 4168298697</span>
+    </div>
+    <div class="company-info">
+        <!--        <img class="footerLogo" src="../assets/img/hamrogroup.jpeg" alt="Company Logo" />-->
+        <img class="footerLogo" src="../assets/img/hamrogroup3.png" alt="Company Logo"/>
+        <h3>Hamro Group</h3>
+        <p>21B Brenda Cres, Scarborough, ON, Canada</p>
+        <div class="contact">
+            <a href="mailto:dhakalmunal@gmail.com">dhakalmunal@gmail.com</a>
+            <a href="tel:4168298697">4168298697</a>
+        </div>
+        <div class="social">
+            <ul>
+                <li>
+                    <a href="https://facebook.com" target="_blank">
+                        <img src="../assets/img/facebook.png" alt="facebookIcon">
+                    </a>
+                </li>
+                <li>
+                    <a href="https://instagram.com" target="_blank">
+                        <img src="../assets/img/instagram.png" alt="instagramIcon">
+                    </a>
+                </li>
+            </ul>
+        </div>
+    </div>
+    <div class="map">
+        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5767.278665315341!2d-79.26273492488535!3d43.71804384823607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4ce4426940e3b%3A0x9c9bd9f976631ad8!2s21B%20Brenda%20Crescent%2C%20Toronto%2C%20ON%20M1K%203C3!5e0!3m2!1sen!2sca!4v1727014812302!5m2!1sen!2sca"
+                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
+                referrerpolicy="no-referrer-when-downgrade"></iframe>
+    </div>
+</footer>
+
+<script src="../js/scripts.js"></script>
+<script>
+    // Check if user is authenticated
+    const token = localStorage.getItem('token');
+    if (!token) {
+        window.location.href = 'login.html';
+    }
+
+    // Fetch categories and display
+    async function loadCategories() {
+        const response = await fetch('http://localhost:3000/api/categories', {
+            headers: {'Authorization': `Bearer ${token}`}
+        });
+        if (response.status === 401) {
+            // Token is invalid, redirect to login.html
+            window.location.href = './login.html';
+        }
+        const categories = await response.json();
+        const categoryTableBody = document.querySelector('#category-table tbody');
+        categoryTableBody.innerHTML = '';
+
+        categories.forEach(category => {
+            const row = document.createElement('tr');
+            row.innerHTML = `
+                <td>${category.name}</td>
+                <td>
+                    <button class="edit-btn" onclick="editCategory(${category.id}, '${category.name}')">Edit</button>
+                    <button class="delete-btn" onclick="deleteCategory(${category.id})">Delete</button>
+                </td>
+            `;
+            categoryTableBody.appendChild(row);
+        });
+    }
+
+    loadCategories();
+
+    // Add new category
+    document.getElementById('add-form').addEventListener('submit', async function (event) {
+        event.preventDefault();
+        const categoryName = document.getElementById('add-name').value;
+
+        // const formData = new FormData();
+        // formData.append('name', categoryName);
+
+        const response = await fetch('http://localhost:3000/api/categories', {
+            method: 'POST',
+            headers: {
+                'Content-Type': 'application/json',
+                'Authorization': `Bearer ${localStorage.getItem('token')}`
+            },
+            body: JSON.stringify({name: categoryName})
+        });
+        if (response.status === 401) {
+            // Token is invalid, redirect to login.html
+            window.location.href = './login.html';
+        }
+
+        document.getElementById('addModal').style.display = 'none';
+
+        loadCategories();
+    });
+
+    // Show Add Product Modal and load categories
+    document.getElementById('addCategoryBtn').onclick = function () {
+        loadCategories();  // Load categories when modal is opened
+        document.getElementById('addModal').style.display = 'flex';
+    };
+
+    // Close Add Product Modal
+    document.getElementById('addModalClose').onclick = function () {
+        document.getElementById('addModal').style.display = 'none';
+    };
+
+    function editCategory(id, name) {
+        document.getElementById('edit-name').value = name;
+
+        const editModal = document.getElementById('editModal');
+        editModal.style.display = 'flex';
+
+        document.getElementById('edit-form').onsubmit = async function (e) {
+            e.preventDefault();
+            const newName = document.getElementById('edit-name').value;
+
+            const formData = new FormData();
+            formData.append('name', newName);
+
+            const response = await fetch(`http://localhost:3000/api/categories/${id}`, {
+                method: 'PUT',
+                headers: {
+                    'Content-Type': 'application/json',
+                    'Authorization': `Bearer ${localStorage.getItem('token')}`
+                },
+                body: JSON.stringify({name: newName})
+            });
+            if (response.status === 401) {
+                // Token is invalid, redirect to login.html
+                window.location.href = './login.html';
+            }
+
+            document.getElementById('editModal').style.display = 'none';
+            loadCategories(); // Reload products after editing
+        };
+
+        document.getElementById('editModalClose').onclick = function () {
+            document.getElementById('editModal').style.display = 'none';
+        };
+    }
+
+    // Delete category
+    async function deleteCategory(id) {
+        if (confirm('Are you sure you want to delete this category?')) {
+            const response = await fetch(`http://localhost:3000/api/categories/${id}`, {
+                method: 'DELETE',
+                headers: {'Authorization': `Bearer ${token}`}
+            });
+            if (response.status === 401) {
+                // Token is invalid, redirect to login.html
+                window.location.href = './login.html';
+            }
+            loadCategories();
+        }
+    }
+</script>
+</body>
+</html>
