@@ -248,8 +248,18 @@
         <h2>Edit Product</h2>
         <form id="edit-form">
             <label>Product Name: <input type="text" id="edit-name"></label><br/>
-            <label>Category: <input type="text" id="edit-category" disabled></label><br/>
-            <label>SubCategory: <input type="text" id="edit-subcategory" disabled></label><br/>
+            <label>Category:
+                <select id="add-edit-category">
+                    <option value="">Select Category</option>
+                    <!-- Categories will be loaded dynamically -->
+                </select>
+            </label><br/>
+            <label>SubCategory:
+                <select id="add-edit-subcategory">
+                    <option value="">Select SubCategory</option>
+                    <!-- Subcategories will be loaded dynamically -->
+                </select>
+            </label><br/>
             <label>Price: <input type="number" id="edit-price" step="0.01"></label><br/>
             <label>Small Details: <input type="text" id="edit-smallDetails"></label><br/>
             <label>Big Description: <textarea id="edit-bigDescription"></textarea></label><br/>
@@ -299,7 +309,7 @@
 <script src="../js/scripts.js"></script>
 <script src="../js/config.js"></script>
 <script>
-    async function loadCategories() {
+    async function loadCategories(categoryId) {
         const response = await fetch(API_CONFIG.getFullUrl('CATEGORIES'), {
             headers: API_CONFIG.getHeaders()
         });
@@ -309,7 +319,7 @@
         }
         const categories = await response.json();
 
-        const categorySelect = document.getElementById('add-category');
+        const categorySelect = document.getElementById(categoryId);
         categorySelect.innerHTML = '<option value="">Select Category</option>'; // Reset the dropdown
 
         categories.forEach(category => {
@@ -321,8 +331,16 @@
     }
 
     document.getElementById('add-category').addEventListener('change', async function () {
-        const categoryId = this.value;
-        const subcategorySelect = document.getElementById('add-subcategory');
+        await loadSubCategories('add-subcategory', this.value);
+    });
+
+    document.getElementById('add-edit-category').addEventListener('change', async function () {
+        await loadSubCategories('add-edit-subcategory', this.value);
+    });
+
+    async function loadSubCategories(subcategoryId, categoryId) {
+        // const categoryId = this.value;
+        const subcategorySelect = document.getElementById(subcategoryId);
 
         if (categoryId) {
             const response = await fetch(API_CONFIG.getFullUrl('SUBCATEGORIES') + `/getByCategoryId/${categoryId}`, {
@@ -344,11 +362,11 @@
         } else {
             subcategorySelect.innerHTML = '<option value="">Select SubCategory</option>'; // Reset if no category selected
         }
-    });
+    }
 
     // Show Add Product Modal and load categories
     document.getElementById('addProductBtn').onclick = function () {
-        loadCategories();  // Load categories when modal is opened
+        loadCategories('add-category');  // Load categories when modal is opened
         document.getElementById('addModal').style.display = 'flex';
     };
 
@@ -417,7 +435,7 @@
                 <td>${product.price}</td>
                 <td>
                     <button class="view-btn" onclick="viewProduct(${product.id})">View</button>
-                    <button class="edit-btn" onclick="editProduct(${product.id}, '${product.name}', '${product.category}', '${product.subcategory}', ${product.price}, '${product.small_details}', '${product.big_description}', '${product.image_path}')">Edit</button>
+                    <button class="edit-btn" onclick="editProduct(${product.id}, '${product.name}', ${product.categoryId}, '${product.category}', ${product.subcategoryId}, '${product.subcategory}', ${product.price}, '${product.small_details}', '${product.big_description}', '${product.image_path}')">Edit</button>
                     <button class="delete-btn" onclick="deleteProduct(${product.id})">Delete</button>
                 </td>
             `;
@@ -471,10 +489,14 @@
     }
 
     // Edit Product Modal Logic
-    function editProduct(id, name, category, subcategory, price, smallDetails, bigDescription, imagePath) {
+    async function editProduct(id, name, categoryId, category, subcategoryId, subcategory, price, smallDetails, bigDescription, imagePath) {
         document.getElementById('edit-name').value = name;
-        document.getElementById('edit-category').value = category;
-        document.getElementById('edit-subcategory').value = subcategory;
+
+        await loadCategories('add-edit-category');
+        await loadSubCategories('add-edit-subcategory', categoryId);
+
+        document.getElementById("add-edit-category").value = categoryId;
+        document.getElementById("add-edit-subcategory").value = subcategoryId;
         document.getElementById('edit-price').value = price;
         document.getElementById('edit-smallDetails').value = smallDetails;
         document.getElementById('edit-bigDescription').value = bigDescription;
@@ -490,12 +512,16 @@
             const newSmallDetails = document.getElementById('edit-smallDetails').value;
             const newBigDescription = document.getElementById('edit-bigDescription').value;
             const newImage = document.getElementById('edit-image').files[0];
+            const categoryId = document.getElementById('add-edit-category').value;
+            const subcategoryId = document.getElementById('add-edit-subcategory').value;
 
             const formData = new FormData();
             formData.append('name', newName);
             formData.append('price', newPrice);
             formData.append('smallDetails', newSmallDetails);
             formData.append('bigDescription', newBigDescription);
+            formData.append('categoryId', categoryId);
+            formData.append('subcategoryId', subcategoryId);
             if (newImage) {
                 formData.append('image', newImage);
             }
