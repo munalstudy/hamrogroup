@@ -13,4 +13,18 @@ function updateNavSelection() {
     });
 }
 
+function updateMainMarginTop() {
+    const header = document.querySelector('.main-header');
+    const main = document.querySelector('main');
+  
+    if (header) {
+      const headerHeight = header.clientHeight;
+      main.style.marginTop = `${headerHeight}px`;
+    }
+  }
+
 updateNavSelection();
+updateMainMarginTop();
+
+// Attach event listener for window resize
+window.addEventListener('resize', updateMainMarginTop);

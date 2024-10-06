@@ -1,209 +1,234 @@
 <!DOCTYPE html>
 <html lang="en">
-
-<head>
-    <meta charset="UTF-8"/>
-    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
-    <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
-    <link rel="icon" href="../assets/img/hamrogroup3.png" type="image/icon type">
+  <head>
+    <meta charset="UTF-8" />
+    <meta http-equiv="X-UA-Compatible" content="IE=edge" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <link
+      rel="icon"
+      href="../assets/img/hamrogroup3.png"
+      type="image/icon type"
+    />
     <title>Grocery and Takeout Kitchen</title>
-    <link rel="stylesheet" href="../css/header.css">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/footer.css">
-    <link href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap" rel="stylesheet">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Lato:ital,wght@0,100;0,300;0,400;0,700;0,900;1,100;1,300;1,400;1,700;1,900&family=Open+Sans:ital,wght@0,300..800;1,300..800&display=swap"
+      rel="stylesheet"
+    />
+
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
+      rel="stylesheet"
+    />
     <style>
-        body {
+      /* body {
             font-family: 'Roboto', sans-serif;
             margin: 0;
             padding: 0;
             background-color: #f8f8f8;
             color: #333;
-        }
+        } */
 
-        .product-container {
-            padding: 20px;
-        }
+      .product-container {
+        padding: 20px;
+      }
 
-        .category-section {
-            margin-bottom: 40px;
-            padding: 20px;
-            background-color: #ffffff;
-            border-radius: 8px;
-            box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-        }
+      .category-section {
+        margin-bottom: 40px;
+        padding: 20px;
+        background-color: #ffffff;
+        border-radius: 8px;
+        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
+      }
 
-        .subcategory-section {
-            margin-top: 20px;
-        }
+      .subcategory-section {
+        margin-top: 20px;
+      }
 
-        .product-grid {
-            display: flex; /* Use flexbox for alignment */
-            flex-wrap: wrap; /* Allow items to wrap to the next line */
-            justify-content: center; /* Center items horizontally */
-            gap: 20px; /* Space between items */
-            background-color: #d8d8e7;
-            padding: 20px;
-        }
+      .product-grid {
+        display: flex; /* Use flexbox for alignment */
+        flex-wrap: wrap; /* Allow items to wrap to the next line */
+        justify-content: center; /* Center items horizontally */
+        gap: 20px; /* Space between items */
+        background-color: #d8d8e7;
+        padding: 20px;
+      }
 
-        .product-card {
-            flex: 0 0 200px; /* Set a fixed width for each card */
-            border: 1px solid #1e0202;
-            border-radius: 8px;
-            background-color: #fff;
-            padding: 10px;
-            text-align: center; /* Center text within the card */
-        }
+      .product-card {
+        flex: 0 0 200px; /* Set a fixed width for each card */
+        border: 1px solid #1e0202;
+        border-radius: 8px;
+        background-color: #fff;
+        padding: 10px;
+        text-align: center; /* Center text within the card */
+      }
 
+      .product-card:hover {
+        transform: translateY(-5px);
+        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
+      }
 
-        .product-card:hover {
-            transform: translateY(-5px);
-            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-        }
+      .product-card img {
+        max-width: 100%;
+        border-radius: 8px;
+      }
 
-        .product-card img {
-            max-width: 100%;
-            border-radius: 8px;
-        }
+      h3,
+      h2 {
+        color: #1e0202;
+      }
 
-        h3, h2 {
-            color: #1e0202;
-        }
-
-        h3 {
-            margin: 10px 0;
-        }
-
+      h3 {
+        margin: 10px 0;
+      }
     </style>
-</head>
+  </head>
 
-<body>
-<header>
-    <div class="headerLogo">
-        <img src="../assets/img/hamrogroup3.png" alt="Company Logo"/>
-        <h1>Hamro Group</h1>
-    </div>
-    <nav>
-        <a href="main.html">Home</a>
-        <a href="grocery.html">Grocery and Takeout Kitchen</a>
-        <a href="renovation.html">Renovation and Building Services</a>
-        <a href="staffing.html">Staffing Services</a>
-        <a href="consulting.html">Business Consulting</a>
-    </nav>
-</header>
+  <body>
+    <header class="main-header">
+      <div class="header-container">
+        <div class="headerLogo">
+          <img src="../assets/img/hamrogroup3.png" alt="Company Logo" />
+          <h1>Hamro Group</h1>
+        </div>
+        <nav>
+          <a href="main.html">Home</a>
+          <a href="grocery.html" class="active">Grocery and Takeout</a>
+          <a href="renovation.html">Renovation and Building</a>
+          <a href="staffing.html">Staffing </a>
+          <a href="consulting.html">Business Consulting</a>
+        </nav>
+      </div>
+    </header>
 
-<main>
-    <section class="product-container" id="productContainer"></section>
-</main>
+    <main>
+      <section class="product-container" id="productContainer"></section>
+    </main>
 
-<footer>
-    <div class="floating-button">
-        <span>Hotline: 4168298697</span>
-    </div>
-    <div class="company-info">
-        <img class="footerLogo" src="../assets/img/hamrogroup3.png" alt="Company Logo"/>
-        <h3>Hamro Group</h3>
-        <p>21B Brenda Cres, Scarborough, ON, Canada</p>
-        <div class="contact">
+    <footer>
+      <div class="footer-wrapper">
+        <div class="floating-button">
+          <span>Hotline: 4168298697</span>
+        </div>
+        <div class="company-info">
+          <img
+            class="footerLogo"
+            src="../assets/img/hamrogroup3.png"
+            alt="Company Logo"
+          />
+          <h3>Hamro Group</h3>
+          <p>21B Brenda Cres, Scarborough, ON, Canada</p>
+          <div class="contact">
             <a href="mailto:dhakalmunal@gmail.com">dhakalmunal@gmail.com</a>
             <a href="tel:4168298697">4168298697</a>
-        </div>
-        <div class="social">
+          </div>
+          <div class="social">
             <ul>
-                <li>
-                    <a href="https://facebook.com" target="_blank">
-                        <img src="../assets/img/facebook.png" alt="facebookIcon">
-                    </a>
-                </li>
-                <li>
-                    <a href="https://instagram.com" target="_blank">
-                        <img src="../assets/img/instagram.png" alt="instagramIcon">
-                    </a>
-                </li>
+              <li>
+                <a href="https://facebook.com" target="_blank">
+                  <img src="../assets/img/facebook.png" alt="facebookIcon" />
+                </a>
+              </li>
+              <li>
+                <a href="https://instagram.com" target="_blank">
+                  <img src="../assets/img/instagram.png" alt="instagramIcon" />
+                </a>
+              </li>
             </ul>
+          </div>
         </div>
-    </div>
-    <div class="map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5767.278665315341!2d-79.26273492488535!3d43.71804384823607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4ce4426940e3b%3A0x9c9bd9f976631ad8!2s21B%20Brenda%20Crescent%2C%20Toronto%2C%20ON%20M1K%203C3!5e0!3m2!1sen!2sca!4v1727014812302!5m2!1sen!2sca"
-                allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-</footer>
+        <div class="map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5767.278665315341!2d-79.26273492488535!3d43.71804384823607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4ce4426940e3b%3A0x9c9bd9f976631ad8!2s21B%20Brenda%20Crescent%2C%20Toronto%2C%20ON%20M1K%203C3!5e0!3m2!1sen!2sca!4v1727014812302!5m2!1sen!2sca"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </footer>
 
-<script src="../js/scripts.js"></script>
-<script src="../js/config.js"></script>
-<script>
-    async function displayProducts() {
-        const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS'), {
-            headers: API_CONFIG.getHeaders()
+    <script defer src="../js/scripts.js"></script>
+    <script src="../js/config.js"></script>
+    <script>
+      async function displayProducts() {
+        const response = await fetch(API_CONFIG.getFullUrl("PRODUCTS"), {
+          headers: API_CONFIG.getHeaders(),
         });
         const products = await response.json();
 
-        const productContainer = document.getElementById('productContainer');
+        const productContainer = document.getElementById("productContainer");
 
         // Group products by category
         const groupedProducts = products.reduce((acc, product) => {
-            if (!acc[product.category]) {
-                acc[product.category] = [];
-            }
-            acc[product.category].push(product);
-            return acc;
+          if (!acc[product.category]) {
+            acc[product.category] = [];
+          }
+          acc[product.category].push(product);
+          return acc;
         }, {});
 
         // Create category sections
         for (const [category, items] of Object.entries(groupedProducts)) {
-            const categorySection = document.createElement('div');
-            categorySection.classList.add('category-section');
+          const categorySection = document.createElement("div");
+          categorySection.classList.add("category-section");
 
-            const categoryTitle = document.createElement('h2');
-            categoryTitle.textContent = category;
-            categorySection.appendChild(categoryTitle);
+          const categoryTitle = document.createElement("h2");
+          categoryTitle.textContent = category;
+          categorySection.appendChild(categoryTitle);
 
-            const subcategoryContainer = document.createElement('div');
-            subcategoryContainer.classList.add('subcategory-container');
+          const subcategoryContainer = document.createElement("div");
+          subcategoryContainer.classList.add("subcategory-container");
 
-            // Group by subcategory
-            const groupedSubcategories = items.reduce((acc, item) => {
-                if (!acc[item.subcategory]) {
-                    acc[item.subcategory] = [];
-                }
-                acc[item.subcategory].push(item);
-                return acc;
-            }, {});
+          // Group by subcategory
+          const groupedSubcategories = items.reduce((acc, item) => {
+            if (!acc[item.subcategory]) {
+              acc[item.subcategory] = [];
+            }
+            acc[item.subcategory].push(item);
+            return acc;
+          }, {});
 
-            // Create subcategory sections
-            for (const [subcategory, subItems] of Object.entries(groupedSubcategories)) {
-                const subcategorySection = document.createElement('div');
-                subcategorySection.classList.add('subcategory-section');
+          // Create subcategory sections
+          for (const [subcategory, subItems] of Object.entries(
+            groupedSubcategories
+          )) {
+            const subcategorySection = document.createElement("div");
+            subcategorySection.classList.add("subcategory-section");
 
-                const subcategoryTitle = document.createElement('h3');
-                subcategoryTitle.textContent = subcategory;
-                subcategorySection.appendChild(subcategoryTitle);
+            const subcategoryTitle = document.createElement("h3");
+            subcategoryTitle.textContent = subcategory;
+            subcategorySection.appendChild(subcategoryTitle);
 
-                const productGrid = document.createElement('div');
-                productGrid.classList.add('product-grid');
+            const productGrid = document.createElement("div");
+            productGrid.classList.add("product-grid");
 
-                subItems.forEach(product => {
-                    const productCard = `
+            subItems.forEach((product) => {
+              const productCard = `
                     <div class="product-card">
                         <img src="${product.image_path}" alt="${product.name}" loading="lazy"/>
                         <h4>${product.name}</h4>
                         <p>${product.small_details}</p>
                         <p>$${product.price}</p>
                     </div>`;
-                    productGrid.innerHTML += productCard;
-                });
+              productGrid.innerHTML += productCard;
+            });
 
-                subcategorySection.appendChild(productGrid);
-                subcategoryContainer.appendChild(subcategorySection);
-            }
+            subcategorySection.appendChild(productGrid);
+            subcategoryContainer.appendChild(subcategorySection);
+          }
 
-            categorySection.appendChild(subcategoryContainer);
-            productContainer.appendChild(categorySection);
+          categorySection.appendChild(subcategoryContainer);
+          productContainer.appendChild(categorySection);
         }
-    }
+      }
 
-    displayProducts();
-</script>
-</body>
-
+      displayProducts();
+    </script>
+  </body>
 </html>

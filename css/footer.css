@@ -1,9 +1,17 @@
 footer {
-    display: flex;
-    justify-content: space-evenly;
+
     background-color: #5eb0cc;
     padding: 20px;
+    color: white;
+}
+
+.footer-wrapper {
+    display: flex;
+    justify-content: space-between;
     flex-wrap: wrap;
+    max-width: 1200px;
+    margin: 0px auto;
+    padding: 0 50px;
 }
 
 .floating-button {
@@ -49,7 +57,7 @@ footer iframe {
 
 .contact a {
     display: block;
-    color: black;
+    color: white;
     text-decoration: none;
     transition: color 0.3s ease-in-out;
 }
@@ -86,7 +94,7 @@ footer iframe {
 
 /* Mobile styles */
 @media (max-width: 600px) {
-    footer {
+    .footer-wrapper {
         flex-direction: column;
         align-items: center;
         text-align: center;

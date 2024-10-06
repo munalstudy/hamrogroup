@@ -5,10 +5,14 @@
 }
 
 body {
-    font-family: Arial, sans-serif;
+    font-family: "Open Sans", sans-serif;
     display: flex;
     flex-direction: column;
     min-height: 100vh;
+}
+
+p, span {
+    font-family: "Lato", sans-serif;
 }
 
 main {
@@ -20,4 +24,20 @@ main {
 
 .mainContent {
     padding: 10px 50px;
+}
+
+.mainContent {
+    display: flex;
+    flex-direction: column;
+    row-gap: 20px;
+    max-width: 1200px;
+    margin: 0 auto;
+}
+
+.content-area {
+    display: flex;
+    flex-direction: column;
+    row-gap: 16 px;
+    line-height: 1.5em;
+    text-align: left;
 }
