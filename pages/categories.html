@@ -145,6 +145,16 @@
         color: white;
         text-decoration: none;
       }
+        .backToProducts, .backToSubCategory, .backToCategory {
+            /*float: right;*/
+            margin: 5px;
+            padding: 10px 20px;
+            background-color: #2c3e50;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
 
       .add-btn:hover,
       .view-btn:hover,
@@ -173,6 +183,9 @@
       </div>
     </header>
     <div class="backPages">
+        <a href="categories.html" class="backButtonsLink">
+            <button class="backToCategory">Go to Category Page</button>
+        </a>
       <a href="subcategories.html" class="backButtonsLink">
         <button class="backToSubCategory">Go to SubCategory Page</button>
       </a>

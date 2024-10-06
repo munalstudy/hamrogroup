@@ -151,6 +151,18 @@
         color: white;
         text-decoration: none;
       }
+      .backToCategory,
+      .backToSubCategory,
+      .backToProducts {
+        /*float: right;*/
+        margin: 5px;
+        padding: 10px 20px;
+        background-color: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
       .add-btn:hover,
       .view-btn:hover,
@@ -191,6 +203,9 @@
       </a>
       <a href="subcategories.html" class="backButtonsLink">
         <button class="backToSubCategory">Go to SubCategory Page</button>
+      </a>
+      <a href="products.html" class="backButtonsLink">
+        <button class="backToProducts">Go to Products Page</button>
       </a>
     </div>
     <div class="product-container">
@@ -278,11 +293,18 @@
           <label>Product Name: <input type="text" id="edit-name" /></label
           ><br />
           <label
-            >Category: <input type="text" id="edit-category" disabled /></label
+            >Category:
+            <select id="add-edit-category">
+              <option value="">Select Category</option>
+              <!-- Categories will be loaded dynamically -->
+            </select> </label
           ><br />
           <label
             >SubCategory:
-            <input type="text" id="edit-subcategory" disabled /></label
+            <select id="add-edit-subcategory">
+              <option value="">Select SubCategory</option>
+              <!-- Subcategories will be loaded dynamically -->
+            </select> </label
           ><br />
           <label
             >Price: <input type="number" id="edit-price" step="0.01" /></label
@@ -337,244 +359,110 @@
             </ul>
           </div>
         </div>
-        <div class="map">
-          <iframe
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5767.278665315341!2d-79.26273492488535!3d43.71804384823607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4ce4426940e3b%3A0x9c9bd9f976631ad8!2s21B%20Brenda%20Crescent%2C%20Toronto%2C%20ON%20M1K%203C3!5e0!3m2!1sen!2sca!4v1727014812302!5m2!1sen!2sca"
-            width="600"
-            height="450"
-            style="border: 0"
-            allowfullscreen=""
-            loading="lazy"
-            referrerpolicy="no-referrer-when-downgrade"
-          ></iframe>
-        </div>
+      </div>
+      <div class="map">
+        <iframe
+          src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5767.278665315341!2d-79.26273492488535!3d43.71804384823607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4ce4426940e3b%3A0x9c9bd9f976631ad8!2s21B%20Brenda%20Crescent%2C%20Toronto%2C%20ON%20M1K%203C3!5e0!3m2!1sen!2sca!4v1727014812302!5m2!1sen!2sca"
+          width="600"
+          height="450"
+          style="border: 0"
+          allowfullscreen=""
+          loading="lazy"
+          referrerpolicy="no-referrer-when-downgrade"
+        ></iframe>
       </div>
     </footer>
     <script defer src="../js/scripts.js"></script>
     <script src="../js/config.js"></script>
     <script>
-      async function loadCategories() {
-        const response = await fetch(API_CONFIG.getFullUrl("CATEGORIES"), {
-          headers: API_CONFIG.getHeaders(),
-        });
-        if (response.status === 401) {
-          // Token is invalid, redirect to login.html
-          window.location.href = "./login.html";
-        }
-        const categories = await response.json();
-
-        const categorySelect = document.getElementById("add-category");
-        categorySelect.innerHTML = '<option value="">Select Category</option>'; // Reset the dropdown
-
-        categories.forEach((category) => {
-          const option = document.createElement("option");
-          option.value = category.id; // Assuming 'id' is the category ID
-          option.textContent = category.name;
-          categorySelect.appendChild(option);
-        });
-      }
-
-      document
-        .getElementById("add-category")
-        .addEventListener("change", async function () {
-          const categoryId = this.value;
-          const subcategorySelect = document.getElementById("add-subcategory");
-
-          if (categoryId) {
-            const response = await fetch(
-              API_CONFIG.getFullUrl("SUBCATEGORIES") +
-                `/getByCategoryId/${categoryId}`,
-              {
-                headers: API_CONFIG.getHeaders(),
-              }
-            );
-            if (response.status === 401) {
-              // Token is invalid, redirect to login.html
-              window.location.href = "./login.html";
-            }
-            const subcategories = await response.json();
-
-            subcategorySelect.innerHTML =
-              '<option value="">Select SubCategory</option>'; // Reset subcategories
-            subcategories.forEach((subcategory) => {
-              const option = document.createElement("option");
-              option.value = subcategory.id; // Assuming 'id' is the subcategory ID
-              option.textContent = subcategory.name;
-              subcategorySelect.appendChild(option);
-            });
-          } else {
-            subcategorySelect.innerHTML =
-              '<option value="">Select SubCategory</option>'; // Reset if no category selected
+      async function loadCategories(categoryId) {
+          const response = await fetch(API_CONFIG.getFullUrl('CATEGORIES'), {
+              headers: API_CONFIG.getHeaders()
+          });
+          if (response.status === 401) {
+            // Token is invalid, redirect to login.html
+            window.location.href = "./login.html";
           }
-        });
+          const categories = await response.json();
+
+          const categorySelect = document.getElementById(categoryId);
+          categorySelect.innerHTML = '<option value="">Select Category</option>'; // Reset the dropdown
+
+          categories.forEach((category) => {
+            const option = document.createElement("option");
+            option.value = category.id; // Assuming 'id' is the category ID
+            option.textContent = category.name;
+            categorySelect.appendChild(option);
+          });
+        }
+
+      document.getElementById('add-category').addEventListener('change', async function () {
+          await loadSubCategories('add-subcategory', this.value);
+      });
+
+      document.getElementById('add-edit-category').addEventListener('change', async function () {
+          await loadSubCategories('add-edit-subcategory', this.value);
+      });
+
+      async function loadSubCategories(subcategoryId, categoryId) {
+          // const categoryId = this.value;
+          const subcategorySelect = document.getElementById(subcategoryId);
+
+            if (categoryId) {
+              const response = await fetch(
+                API_CONFIG.getFullUrl("SUBCATEGORIES") +
+                  `/getByCategoryId/${categoryId}`,
+                {
+                  headers: API_CONFIG.getHeaders(),
+                }
+              );
+              if (response.status === 401) {
+                // Token is invalid, redirect to login.html
+                window.location.href = "./login.html";
+              }
+              const subcategories = await response.json();
+
+              subcategorySelect.innerHTML =
+                '<option value="">Select SubCategory</option>'; // Reset subcategories
+              subcategories.forEach((subcategory) => {
+                const option = document.createElement("option");
+                option.value = subcategory.id; // Assuming 'id' is the subcategory ID
+                option.textContent = subcategory.name;
+                subcategorySelect.appendChild(option);
+              });
+          } else {
+              subcategorySelect.innerHTML = '<option value="">Select SubCategory</option>'; // Reset if no category selected
+          }
+      }
 
       // Show Add Product Modal and load categories
-      document.getElementById("addProductBtn").onclick = function () {
-        loadCategories(); // Load categories when modal is opened
-        document.getElementById("addModal").style.display = "flex";
+      document.getElementById('addProductBtn').onclick = function () {
+          loadCategories('add-category');  // Load categories when modal is opened
+          document.getElementById('addModal').style.display = 'flex';
       };
 
-      // Close Add Product Modal
-      document.getElementById("addModalClose").onclick = function () {
-        document.getElementById("addModal").style.display = "none";
-      };
-
-      document.getElementById("add-form").onsubmit = async function (e) {
-        e.preventDefault();
-
-        const newName = document.getElementById("add-name").value;
-        const newCategory = document.getElementById("add-category").value;
-        const newSubcategory = document.getElementById("add-subcategory").value;
-        const newPrice = document.getElementById("add-price").value;
-        const newSmallDetails =
-          document.getElementById("add-smallDetails").value;
-        const newBigDescription =
-          document.getElementById("add-bigDescription").value;
-        const newImage = document.getElementById("add-image").files[0];
-
-        const formData = new FormData();
-        formData.append("name", newName);
-        // formData.append('category', newCategory);
-        formData.append("subcategoryId", newSubcategory);
-        formData.append("price", newPrice);
-        formData.append("smallDetails", newSmallDetails);
-        formData.append("bigDescription", newBigDescription);
-        if (newImage) {
-          formData.append("image", newImage);
-        }
-
-        const response = await fetch(API_CONFIG.getFullUrl("PRODUCTS"), {
-          method: "POST",
-          body: formData,
-          headers: API_CONFIG.getHeaders(),
-        });
-
-        if (response.status === 401) {
-          // Token is invalid, redirect to login.html
-          window.location.href = "./login.html";
-        }
-
-        document.getElementById("addModal").style.display = "none";
-        loadProducts(); // Reload products after adding
-      };
-
-      // Fetch and display products
-      async function loadProducts() {
-        const response = await fetch(API_CONFIG.getFullUrl("PRODUCTS"), {
-          headers: API_CONFIG.getHeaders(),
-        });
-        if (response.status === 401) {
-          // Token is invalid, redirect to login.html
-          window.location.href = "./login.html";
-        }
-        const products = await response.json();
-        const productTableBody = document.querySelector("#product-table tbody");
-        productTableBody.innerHTML = "";
-
-        products.forEach((product) => {
-          const row = document.createElement("tr");
-          row.innerHTML = `
-                <td>${product.category}</td>
-                <td>${product.subcategory}</td>
-                <td>${product.name}</td>
-                <td>${product.price}</td>
-                <td>
-                    <button class="view-btn" onclick="viewProduct(${product.id})">View</button>
-                    <button class="edit-btn" onclick="editProduct(${product.id}, '${product.name}', '${product.category}', '${product.subcategory}', ${product.price}, '${product.small_details}', '${product.big_description}', '${product.image_path}')">Edit</button>
-                    <button class="delete-btn" onclick="deleteProduct(${product.id})">Delete</button>
-                </td>
-            `;
-          productTableBody.appendChild(row);
-        });
-      }
-
-      // View Product Modal Logic
-      async function viewProduct(id) {
-        const response = await fetch(
-          API_CONFIG.getFullUrl("PRODUCTS") + `/${id}`,
-          {
-            headers: API_CONFIG.getHeaders(),
-          }
-        );
-
-        if (response.status === 401) {
-          // Token is invalid, redirect to login.html
-          window.location.href = "./login.html";
-        }
-
-        const product = await response.json();
-
-        if (product) {
-          document.getElementById("viewModalName").innerText = product.name;
-          document.getElementById("viewModalCategory").innerText =
-            product.category;
-          document.getElementById("viewModalSubcategory").innerText =
-            product.subcategory;
-          document.getElementById("viewModalPrice").innerText = product.price;
-          document.getElementById("viewModalSmallDetails").innerText =
-            product.small_details;
-          document.getElementById("viewModalDetails").innerText =
-            product.big_description;
-          document.getElementById("viewModalImage").src = product.image_path;
-
-          const viewModal = document.getElementById("viewModal");
-          viewModal.style.display = "flex";
-        }
-
-        // .then(response => response.json())
-        // .then(product => {
-        //     document.getElementById('viewModalName').innerText = product.name;
-        //     document.getElementById('viewModalCategory').innerText = product.category;
-        //     document.getElementById('viewModalSubcategory').innerText = product.subcategory;
-        //     document.getElementById('viewModalPrice').innerText = product.price;
-        //     document.getElementById('viewModalSmallDetails').innerText = product.small_details;
-        //     document.getElementById('viewModalDetails').innerText = product.big_description;
-        //     document.getElementById('viewModalImage').src = product.image_path;
-        //
-        //     const viewModal = document.getElementById('viewModal');
-        //     viewModal.style.display = 'flex';
-        // });
-
-        document.getElementById("viewModalClose").onclick = function () {
-          document.getElementById("viewModal").style.display = "none";
+        // Close Add Product Modal
+        document.getElementById("addModalClose").onclick = function () {
+          document.getElementById("addModal").style.display = "none";
         };
-      }
 
-      // Edit Product Modal Logic
-      function editProduct(
-        id,
-        name,
-        category,
-        subcategory,
-        price,
-        smallDetails,
-        bigDescription,
-        imagePath
-      ) {
-        document.getElementById("edit-name").value = name;
-        document.getElementById("edit-category").value = category;
-        document.getElementById("edit-subcategory").value = subcategory;
-        document.getElementById("edit-price").value = price;
-        document.getElementById("edit-smallDetails").value = smallDetails;
-        document.getElementById("edit-bigDescription").value = bigDescription;
-        document.getElementById("edit-image").value = "";
-
-        const editModal = document.getElementById("editModal");
-        editModal.style.display = "flex";
-
-        document.getElementById("edit-form").onsubmit = async function (e) {
+        document.getElementById("add-form").onsubmit = async function (e) {
           e.preventDefault();
-          const newName = document.getElementById("edit-name").value;
-          const newPrice = document.getElementById("edit-price").value;
+
+          const newName = document.getElementById("add-name").value;
+          const newCategory = document.getElementById("add-category").value;
+          const newSubcategory = document.getElementById("add-subcategory").value;
+          const newPrice = document.getElementById("add-price").value;
           const newSmallDetails =
-            document.getElementById("edit-smallDetails").value;
-          const newBigDescription = document.getElementById(
-            "edit-bigDescription"
-          ).value;
-          const newImage = document.getElementById("edit-image").files[0];
+            document.getElementById("add-smallDetails").value;
+          const newBigDescription =
+            document.getElementById("add-bigDescription").value;
+          const newImage = document.getElementById("add-image").files[0];
 
           const formData = new FormData();
           formData.append("name", newName);
+          // formData.append('category', newCategory);
+          formData.append("subcategoryId", newSubcategory);
           formData.append("price", newPrice);
           formData.append("smallDetails", newSmallDetails);
           formData.append("bigDescription", newBigDescription);
@@ -582,48 +470,175 @@
             formData.append("image", newImage);
           }
 
-          const response = await fetch(
-            API_CONFIG.getFullUrl("PRODUCTS") + `/${id}`,
-            {
-              method: "PUT",
-              body: formData,
-              headers: API_CONFIG.getHeaders(),
-            }
-          );
+          const response = await fetch(API_CONFIG.getFullUrl("PRODUCTS"), {
+            method: "POST",
+            body: formData,
+            headers: API_CONFIG.getHeaders(),
+          });
 
           if (response.status === 401) {
             // Token is invalid, redirect to login.html
             window.location.href = "./login.html";
           }
 
-          document.getElementById("editModal").style.display = "none";
-          loadProducts(); // Reload products after editing
+          document.getElementById("addModal").style.display = "none";
+          loadProducts(); // Reload products after adding
         };
 
-        document.getElementById("editModalClose").onclick = function () {
-          document.getElementById("editModal").style.display = "none";
-        };
-      }
-
-      async function deleteProduct(id) {
-        if (confirm("Are you sure you want to delete this product?")) {
-          const response = await fetch(
-            API_CONFIG.getFullUrl("PRODUCTS") + `/${id}`,
-            {
-              method: "DELETE",
-              headers: API_CONFIG.getHeaders(),
-            }
-          );
+        // Fetch and display products
+        async function loadProducts() {
+          const response = await fetch(API_CONFIG.getFullUrl("PRODUCTS"), {
+            headers: API_CONFIG.getHeaders(),
+          });
           if (response.status === 401) {
             // Token is invalid, redirect to login.html
             window.location.href = "./login.html";
           }
-          loadProducts();
+          const products = await response.json();
+          const productTableBody = document.querySelector("#product-table tbody");
+          productTableBody.innerHTML = "";
+
+          products.forEach((product) => {
+            const row = document.createElement("tr");
+            row.innerHTML = `
+                  <td>${product.category}</td>
+                  <td>${product.subcategory}</td>
+                  <td>${product.name}</td>
+                  <td>${product.price}</td>
+                  <td>
+                      <button class="view-btn" onclick="viewProduct(${product.id})">View</button>
+                      <button class="edit-btn" onclick="editProduct(${product.id}, '${product.name}', ${product.categoryId}, '${product.category}', ${product.subcategoryId}, '${product.subcategory}', ${product.price}, '${product.small_details}', '${product.big_description}', '${product.image_path}')">Edit</button>
+                      <button class="delete-btn" onclick="deleteProduct(${product.id})">Delete</button>
+                  </td>
+              `;
+            productTableBody.appendChild(row);
+          });
         }
-      }
 
-      // Load products when the page loads
-      window.onload = loadProducts;
+        // View Product Modal Logic
+        async function viewProduct(id) {
+          const response = await fetch(
+            API_CONFIG.getFullUrl("PRODUCTS") + `/${id}`,
+            {
+              headers: API_CONFIG.getHeaders(),
+            }
+          );
+
+          if (response.status === 401) {
+            // Token is invalid, redirect to login.html
+            window.location.href = "./login.html";
+          }
+
+          const product = await response.json();
+
+          if (product) {
+            document.getElementById("viewModalName").innerText = product.name;
+            document.getElementById("viewModalCategory").innerText =
+              product.category;
+            document.getElementById("viewModalSubcategory").innerText =
+              product.subcategory;
+            document.getElementById("viewModalPrice").innerText = product.price;
+            document.getElementById("viewModalSmallDetails").innerText =
+              product.small_details;
+            document.getElementById("viewModalDetails").innerText =
+              product.big_description;
+            document.getElementById("viewModalImage").src = product.image_path;
+
+            const viewModal = document.getElementById("viewModal");
+            viewModal.style.display = "flex";
+          }
+
+          // .then(response => response.json())
+          // .then(product => {
+          //     document.getElementById('viewModalName').innerText = product.name;
+          //     document.getElementById('viewModalCategory').innerText = product.category;
+          //     document.getElementById('viewModalSubcategory').innerText = product.subcategory;
+          //     document.getElementById('viewModalPrice').innerText = product.price;
+          //     document.getElementById('viewModalSmallDetails').innerText = product.small_details;
+          //     document.getElementById('viewModalDetails').innerText = product.big_description;
+          //     document.getElementById('viewModalImage').src = product.image_path;
+          //
+          //     const viewModal = document.getElementById('viewModal');
+          //     viewModal.style.display = 'flex';
+          // });
+
+          document.getElementById("viewModalClose").onclick = function () {
+            document.getElementById("viewModal").style.display = "none";
+          };
+        }
+
+      // Edit Product Modal Logic
+      async function editProduct(id, name, categoryId, category, subcategoryId, subcategory, price, smallDetails, bigDescription, imagePath) {
+          document.getElementById('edit-name').value = name;
+
+          await loadCategories('add-edit-category');
+          await loadSubCategories('add-edit-subcategory', categoryId);
+
+          document.getElementById("add-edit-category").value = categoryId;
+          document.getElementById("add-edit-subcategory").value = subcategoryId;
+          document.getElementById('edit-price').value = price;
+          document.getElementById('edit-smallDetails').value = smallDetails;
+          document.getElementById('edit-bigDescription').value = bigDescription;
+          document.getElementById('edit-image').value = '';
+
+          const editModal = document.getElementById("editModal");
+          editModal.style.display = "flex";
+
+          document.getElementById('edit-form').onsubmit = async function (e) {
+              e.preventDefault();
+              const newName = document.getElementById('edit-name').value;
+              const newPrice = document.getElementById('edit-price').value;
+              const newSmallDetails = document.getElementById('edit-smallDetails').value;
+              const newBigDescription = document.getElementById('edit-bigDescription').value;
+              const newImage = document.getElementById('edit-image').files[0];
+              const categoryId = document.getElementById('add-edit-category').value;
+              const subcategoryId = document.getElementById('add-edit-subcategory').value;
+
+              const formData = new FormData();
+              formData.append('name', newName);
+              formData.append('price', newPrice);
+              formData.append('smallDetails', newSmallDetails);
+              formData.append('bigDescription', newBigDescription);
+              formData.append('categoryId', categoryId);
+              formData.append('subcategoryId', subcategoryId);
+              if (newImage) {
+                  formData.append('image', newImage);
+              }
+            );
+
+            if (response.status === 401) {
+              // Token is invalid, redirect to login.html
+              window.location.href = "./login.html";
+            }
+
+            document.getElementById("editModal").style.display = "none";
+            loadProducts(); // Reload products after editing
+          };
+
+          document.getElementById("editModalClose").onclick = function () {
+            document.getElementById("editModal").style.display = "none";
+          };
+        }
+
+        async function deleteProduct(id) {
+          if (confirm("Are you sure you want to delete this product?")) {
+            const response = await fetch(
+              API_CONFIG.getFullUrl("PRODUCTS") + `/${id}`,
+              {
+                method: "DELETE",
+                headers: API_CONFIG.getHeaders(),
+              }
+            );
+            if (response.status === 401) {
+              // Token is invalid, redirect to login.html
+              window.location.href = "./login.html";
+            }
+            loadProducts();
+          }
+        }
+
+        // Load products when the page loads
+        window.onload = loadProducts;
     </script>
   </body>
 </html>
