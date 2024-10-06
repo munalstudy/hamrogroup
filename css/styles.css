@@ -15,5 +15,9 @@ main {
     flex-grow: 1;
     padding: 20px;
     text-align: center;
-    background-color: #f5f5dc;
+    background-color: #f3f2ee;
+}
+
+.mainContent {
+    padding: 10px 50px;
 }

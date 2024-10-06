@@ -5,7 +5,7 @@ const API_CONFIG = {
         PRODUCTS: '/api/products',
         CATEGORIES: '/api/categories',
         SUBCATEGORIES: '/api/subcategories',
-        LOGIN: '/api/login',
+        LOGIN: '/api/auth/login',
     },
     getFullUrl: function(endpoint) {
         return this.BASE_URL + this.ENDPOINTS[endpoint];
