@@ -261,15 +261,13 @@
                 <h2>Edit Category</h2>
                 <form id="edit-form" class="form-container">
                   <div class="form-group">
-                    <label for="edit-categoryName" class="form-label"
-                      >Category Name:</label
+                    <label for="add-edit-category" class="form-label"
+                    >Category Name:</label
                     >
-                    <input
-                      type="text"
-                      id="edit-categoryName"
-                      class="form-input"
-                      disabled
-                    />
+                    <select id="add-edit-category" class="form-input">
+                      <option value="">Select Category</option>
+                      <!-- Categories will be loaded dynamically -->
+                    </select>
                   </div>
 
                   <div class="form-group">
@@ -333,7 +331,7 @@
     <script defer src="../js/scripts.js"></script>
     <script src="../js/config.js"></script>
     <script>
-      async function loadCategories() {
+      async function loadCategories(id) {
         const response = await fetch(API_CONFIG.getFullUrl("CATEGORIES"), {
           headers: API_CONFIG.getHeaders(),
         });
@@ -343,7 +341,7 @@
         }
         const categories = await response.json();
 
-        const categorySelect = document.getElementById("add-category");
+        const categorySelect = document.getElementById(id);
         categorySelect.innerHTML = '<option value="">Select Category</option>'; // Reset the dropdown
 
         categories.forEach((category) => {
@@ -375,7 +373,7 @@
                 <td>${subcategory.categoryName}</td>
                 <td>${subcategory.name}</td>
                 <td>
-                    <button class="edit-btn" onclick="editCategory(${subcategory.id}, '${subcategory.name}', '${subcategory.categoryName}')">Edit</button>
+                    <button class="edit-btn" onclick="editCategory(${subcategory.id}, '${subcategory.name}', ${subcategory.categoryId},'${subcategory.categoryName}')">Edit</button>
                     <button class="delete-btn" onclick="deleteSubCategory(${subcategory.id})">Delete</button>
                 </td>
             `;
@@ -421,7 +419,7 @@
 
       // Show Add Product Modal and load categories
       document.getElementById("addCategoryBtn").onclick = function () {
-        loadCategories(); // Load categories when modal is opened
+        loadCategories("add-category"); // Load categories when modal is opened
         document.getElementById("addModal").style.display = "flex";
       };
 
@@ -430,9 +428,10 @@
         document.getElementById("addModal").style.display = "none";
       };
 
-      function editCategory(id, name, categoryName) {
+      async function editCategory(id, name, categoryId, categoryName) {
         document.getElementById("edit-name").value = name;
-        document.getElementById("edit-categoryName").value = categoryName;
+        await loadCategories("add-edit-category");
+        document.getElementById("add-edit-category").value = categoryId;
 
         const editModal = document.getElementById("editModal");
         editModal.style.display = "flex";
@@ -440,8 +439,9 @@
         document.getElementById("edit-form").onsubmit = async function (e) {
           e.preventDefault();
           const newName = document.getElementById("edit-name").value;
-          const categoryName =
-            document.getElementById("edit-categoryName").value;
+          // const categoryName =
+          //   document.getElementById("edit-categoryName").value;
+          const categoryId = document.getElementById("add-edit-category").value;
 
           // const formData = new FormData();
           // formData.append('name', newName);
@@ -456,7 +456,8 @@
               headers: headers,
               body: JSON.stringify({
                 name: newName,
-                categoryName: categoryName,
+                categoryId: categoryId
+                // categoryName: categoryName,
               }),
             }
           );
