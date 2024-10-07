@@ -1,437 +1,518 @@
 <!DOCTYPE html>
 <html lang="en">
-<head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <title>Manage Products</title>
-    <link rel="stylesheet" href="../css/header.css">
-    <link rel="stylesheet" href="../css/styles.css">
-    <link rel="stylesheet" href="../css/footer.css">
+    <link rel="stylesheet" href="../css/header.css" />
+    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/footer.css" />
     <style>
-        /* General styling */
-        body {
-            font-family: Arial, sans-serif;
-            margin: 0;
-            padding: 0;
-            box-sizing: border-box;
-        }
+      /* General styling */
+      body {
+        font-family: Arial, sans-serif;
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
 
+      .product-container {
+        padding: 20px;
+        overflow-x: auto; /* Allow horizontal scrolling */
+      }
 
-        .product-container {
-            padding: 20px;
-            overflow-x: auto; /* Allow horizontal scrolling */
-        }
+      h2 {
+        color: #2c3e50;
+      }
 
-        h2 {
-            color: #2c3e50;
-        }
+      table {
+        width: 100%;
+        border-collapse: collapse;
+        margin: 20px 0;
+      }
 
-        table {
-            width: 100%;
-            border-collapse: collapse;
-            margin: 20px 0;
-        }
+      th,
+      td {
+        padding: 10px;
+        border: 1px solid #ddd;
+        text-align: left;
+      }
 
-        th, td {
-            padding: 10px;
-            border: 1px solid #ddd;
-            text-align: left;
-        }
+      th {
+        background-color: #2c3e50;
+        color: white;
+      }
 
-        th {
-            background-color: #2c3e50;
-            color: white;
-        }
+      /* Responsive Modal Styles */
+      .modal {
+        display: none;
+        position: fixed;
+        z-index: 9999;
+        left: 0;
+        top: 0;
+        width: 100%;
+        height: 100%;
+        background-color: rgba(0, 0, 0, 0.5);
+        justify-content: center;
+        align-items: center;
+      }
 
-        /* Responsive Modal Styles */
-        .modal {
-            display: none;
-            position: fixed;
-            z-index: 9999;
-            left: 0;
-            top: 0;
-            width: 100%;
-            height: 100%;
-            background-color: rgba(0, 0, 0, 0.5);
-            justify-content: center;
-            align-items: center;
-        }
+      .modal-content {
+        background-color: white;
+        padding: 20px;
+        border-radius: 10px;
+        width: 90%; /* Default width for mobile */
+        max-width: 600px; /* Maximum width for larger screens */
+        text-align: center;
+        position: relative;
+        word-wrap: break-word;
+      }
 
-        .modal-content {
-            background-color: white;
-            padding: 20px;
-            border-radius: 10px;
-            width: 90%; /* Default width for mobile */
-            max-width: 600px; /* Maximum width for larger screens */
-            text-align: center;
-            position: relative;
-            word-wrap: break-word;
-        }
+      .close {
+        position: absolute;
+        top: 10px;
+        right: 20px;
+        font-size: 24px;
+        cursor: pointer;
+      }
 
-        .close {
-            position: absolute;
-            top: 10px;
-            right: 20px;
-            font-size: 24px;
-            cursor: pointer;
-        }
+      .modal img {
+        /*width: 100%; !* Make image responsive *!*/
+        width: 50%;
+        height: auto;
+        margin-bottom: 20px;
+      }
 
-        .modal img {
-            /*width: 100%; !* Make image responsive *!*/
-            width: 50%;
-            height: auto;
-            margin-bottom: 20px;
-        }
+      /* Toast Styles */
+      #toast-container {
+        position: fixed;
+        bottom: 20px;
+        right: 20px;
+        z-index: 10000;
+      }
 
-        /* Toast Styles */
-        #toast-container {
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            z-index: 10000;
-        }
+      .toast {
+        background-color: #333;
+        color: white;
+        padding: 10px;
+        margin: 5px;
+        border-radius: 5px;
+      }
 
-        .toast {
-            background-color: #333;
-            color: white;
-            padding: 10px;
-            margin: 5px;
-            border-radius: 5px;
-        }
+      .add-btn {
+        float: right;
+        padding: 10px 20px;
+        background-color: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-        .add-btn {
-            float: right;
-            padding: 10px 20px;
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+      .view-btn,
+      .edit-btn,
+      .delete-btn {
+        /*float: right;*/
+        margin: 2px;
+        padding: 5px 10px;
+        background-color: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-        .view-btn, .edit-btn, .delete-btn {
-            /*float: right;*/
-            margin: 2px;
-            padding: 5px 10px;
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+      .backPages {
+        padding: 20px;
+        overflow-x: auto;
+      }
 
-        .backPages {
-            padding: 20px;
-            overflow-x: auto;
-        }
+      .backToCategory,
+      .backToSubCategory,
+      .backToProducts {
+        /*float: right;*/
+        margin: 5px;
+        padding: 10px 20px;
+        background-color: #2c3e50;
+        color: white;
+        border: none;
+        border-radius: 5px;
+        cursor: pointer;
+      }
 
-        .backToCategory, .backToSubCategory, .backToProducts {
-            /*float: right;*/
-            margin: 5px;
-            padding: 10px 20px;
-            background-color: #2c3e50;
-            color: white;
-            border: none;
-            border-radius: 5px;
-            cursor: pointer;
-        }
+      .backButtonsLink {
+        color: white;
+        text-decoration: none;
+      }
 
-        .backButtonsLink {
-            color: white;
-            text-decoration: none;
-        }
+      .add-btn:hover,
+      .view-btn:hover,
+      .edit-btn:hover,
+      .delete-btn:hover,
+      .backToCategory:hover,
+      .backToSubCategory:hover {
+        background-color: #1a252f;
+      }
 
-        .add-btn:hover, .view-btn:hover, .edit-btn:hover, .delete-btn:hover, .backToCategory:hover, .backToSubCategory:hover {
-            background-color: #1a252f;
-        }
-
-        /*footer {*/
-        /*    background-color: #2c3e50;*/
-        /*    color: white;*/
-        /*    padding: 10px;*/
-        /*    text-align: center;*/
-        /*}*/
+      /*footer {*/
+      /*    background-color: #2c3e50;*/
+      /*    color: white;*/
+      /*    padding: 10px;*/
+      /*    text-align: center;*/
+      /*}*/
     </style>
+  </head>
+  <body>
+    <header class="main-header">
+      <div class="header-container">
+        <div class="headerLogo">
+          <img src="../assets/img/hamrogroup3.png" alt="Company Logo" />
+          <h1>Hamro Group</h1>
+        </div>
+        <nav>
+          <a href="main.html">Home</a>
+          <a href="grocery.html">Grocery and Takeout Kitchen</a>
+          <a href="renovation.html">Renovation and Building Services</a>
+          <a href="staffing.html">Staffing Services</a>
+          <a href="consulting.html">Business Consulting</a>
+        </nav>
+      </div>
+    </header>
+    <main>
+      <section class="content">
+        <div class="mainContent">
+          <div class="content-area">
+            <div class="backPages">
+              <a href="categories.html" class="backButtonsLink">
+                <button class="backToCategory">Go to Category Page</button>
+              </a>
+              <a href="subcategories.html" class="backButtonsLink">
+                <button class="backToSubCategory">
+                  Go to SubCategory Page
+                </button>
+              </a>
+              <a href="products.html" class="backButtonsLink">
+                <button class="backToProducts">Go to Products Page</button>
+              </a>
+            </div>
+            <div class="product-container">
+              <button id="addProductBtn" class="add-btn">Add Product</button>
+              <h2>Products</h2>
+              <div class="table-wrapper">
+              <table id="product-table">
+                <thead>
+                  <tr>
+                    <th>Name</th>
+                    <th>Category</th>
+                    <th>SubCategory</th>
+                    <th>Price</th>
+                    <th>Actions</th>
+                  </tr>
+                </thead>
+                <tbody>
+                  <!-- Dynamic Product Rows -->
+                </tbody>
+              </table>
+            </div>
+            </div>
 
-</head>
-<body>
+            <!-- View Product Modal -->
+            <div id="viewModal" class="modal">
+              <div class="modal-content">
+                <span class="close" id="viewModalClose">&times;</span>
+                <h2>Product Details</h2>
+                <img id="viewModalImage" src="" alt="Product Image" />
+                <p>
+                  <strong>Category:</strong>
+                  <span id="viewModalCategory"></span>
+                </p>
+                <p>
+                  <strong>SubCategory:</strong>
+                  <span id="viewModalSubcategory"></span>
+                </p>
+                <p><strong>Name:</strong> <span id="viewModalName"></span></p>
+                <p><strong>Price:</strong> <span id="viewModalPrice"></span></p>
+                <p>
+                  <strong>Details:</strong>
+                  <span id="viewModalSmallDetails"></span>
+                </p>
+                <p>
+                  <strong>Description:</strong>
+                  <span id="viewModalDetails"></span>
+                </p>
+              </div>
+            </div>
 
-<header>
-    <div class="headerLogo">
-        <img src="../assets/img/hamrogroup3.png" alt="Company Logo"/>
-        <h1>Hamro Group</h1>
-    </div>
-    <nav>
-        <a href="main.html">Home</a>
-        <a href="grocery.html">Grocery and Takeout Kitchen</a>
-        <a href="renovation.html">Renovation and Building Services</a>
-        <a href="staffing.html">Staffing Services</a>
-        <a href="consulting.html">Business Consulting</a>
-    </nav>
-</header>
-<div class="backPages">
-    <a href="categories.html" class="backButtonsLink">
-        <button class="backToCategory">Go to Category Page</button>
-    </a>
-    <a href="subcategories.html" class="backButtonsLink">
-        <button class="backToSubCategory">Go to SubCategory Page</button>
-    </a>
-    <a href="products.html" class="backButtonsLink">
-        <button class="backToProducts">Go to Products Page</button>
-    </a>
-</div>
-<div class="product-container">
-    <button id="addProductBtn" class="add-btn">Add Product</button>
-    <h2>Products</h2>
-    <table id="product-table">
-        <thead>
-        <tr>
-            <th>Name</th>
-            <th>Category</th>
-            <th>SubCategory</th>
-            <th>Price</th>
-            <th>Actions</th>
-        </tr>
-        </thead>
-        <tbody>
-        <!-- Dynamic Product Rows -->
-        </tbody>
-    </table>
-</div>
+            <!-- Add Product Modal -->
+            <div id="addModal" class="modal">
+              <div class="modal-content">
+                <span class="close" id="addModalClose">&times;</span>
+                <h2>Add New Product</h2>
+                <form id="add-form">
+                  <label
+                    >Category:
+                    <select id="add-category">
+                      <option value="">Select Category</option>
+                      <!-- Categories will be loaded dynamically -->
+                    </select> </label
+                  ><br />
+                  <label
+                    >SubCategory:
+                    <select id="add-subcategory">
+                      <option value="">Select SubCategory</option>
+                      <!-- Subcategories will be loaded dynamically -->
+                    </select> </label
+                  ><br />
+                  <label
+                    >Product Name: <input type="text" id="add-name" /></label
+                  ><br />
+                  <label
+                    >Price:
+                    <input type="number" id="add-price" step="0.01" /></label
+                  ><br />
+                  <label
+                    >Small Details:
+                    <input type="text" id="add-smallDetails" /></label
+                  ><br />
+                  <label
+                    >Big Description:
+                    <textarea id="add-bigDescription"></textarea></label
+                  ><br />
+                  <label
+                    >Product Image: <input type="file" id="add-image" /></label
+                  ><br />
+                  <button type="submit">Save</button>
+                </form>
+              </div>
+            </div>
 
-<!-- View Product Modal -->
-<div id="viewModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="viewModalClose">&times;</span>
-        <h2>Product Details</h2>
-        <img id="viewModalImage" src="" alt="Product Image">
-        <p><strong>Category:</strong> <span id="viewModalCategory"></span></p>
-        <p><strong>SubCategory:</strong> <span id="viewModalSubcategory"></span></p>
-        <p><strong>Name:</strong> <span id="viewModalName"></span></p>
-        <p><strong>Price:</strong> <span id="viewModalPrice"></span></p>
-        <p><strong>Details:</strong> <span id="viewModalSmallDetails"></span></p>
-        <p><strong>Description:</strong> <span id="viewModalDetails"></span></p>
-    </div>
-</div>
+            <!-- Edit Product Modal -->
+            <div id="editModal" class="modal">
+              <div class="modal-content">
+                <span class="close" id="editModalClose">&times;</span>
+                <h2>Edit Product</h2>
+                <form id="edit-form">
+                  <label
+                    >Product Name: <input type="text" id="edit-name" /></label
+                  ><br />
+                  <label
+                    >Category:
+                    <select id="add-edit-category">
+                      <option value="">Select Category</option>
+                      <!-- Categories will be loaded dynamically -->
+                    </select> </label
+                  ><br />
+                  <label
+                    >SubCategory:
+                    <select id="add-edit-subcategory">
+                      <option value="">Select SubCategory</option>
+                      <!-- Subcategories will be loaded dynamically -->
+                    </select> </label
+                  ><br />
+                  <label
+                    >Price:
+                    <input type="number" id="edit-price" step="0.01" /></label
+                  ><br />
+                  <label
+                    >Small Details:
+                    <input type="text" id="edit-smallDetails" /></label
+                  ><br />
+                  <label
+                    >Big Description:
+                    <textarea id="edit-bigDescription"></textarea></label
+                  ><br />
+                  <label
+                    >Product Image: <input type="file" id="edit-image" /></label
+                  ><br />
+                  <button type="submit">Save</button>
+                </form>
+              </div>
+            </div>
 
+            <!-- Toast Container for Notifications -->
+            <div id="toast-container"></div>
+          </div>
+        </div>
+      </section>
+    </main>
 
-<!-- Add Product Modal -->
-<div id="addModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="addModalClose">&times;</span>
-        <h2>Add New Product</h2>
-        <form id="add-form">
-            <label>Category:
-                <select id="add-category">
-                    <option value="">Select Category</option>
-                    <!-- Categories will be loaded dynamically -->
-                </select>
-            </label><br/>
-            <label>SubCategory:
-                <select id="add-subcategory">
-                    <option value="">Select SubCategory</option>
-                    <!-- Subcategories will be loaded dynamically -->
-                </select>
-            </label><br/>
-            <label>Product Name: <input type="text" id="add-name"></label><br/>
-            <label>Price: <input type="number" id="add-price" step="0.01"></label><br/>
-            <label>Small Details: <input type="text" id="add-smallDetails"></label><br/>
-            <label>Big Description: <textarea id="add-bigDescription"></textarea></label><br/>
-            <label>Product Image: <input type="file" id="add-image"></label><br/>
-            <button type="submit">Save</button>
-        </form>
-    </div>
-</div>
-
-
-<!-- Edit Product Modal -->
-<div id="editModal" class="modal">
-    <div class="modal-content">
-        <span class="close" id="editModalClose">&times;</span>
-        <h2>Edit Product</h2>
-        <form id="edit-form">
-            <label>Product Name: <input type="text" id="edit-name"></label><br/>
-            <label>Category:
-                <select id="add-edit-category">
-                    <option value="">Select Category</option>
-                    <!-- Categories will be loaded dynamically -->
-                </select>
-            </label><br/>
-            <label>SubCategory:
-                <select id="add-edit-subcategory">
-                    <option value="">Select SubCategory</option>
-                    <!-- Subcategories will be loaded dynamically -->
-                </select>
-            </label><br/>
-            <label>Price: <input type="number" id="edit-price" step="0.01"></label><br/>
-            <label>Small Details: <input type="text" id="edit-smallDetails"></label><br/>
-            <label>Big Description: <textarea id="edit-bigDescription"></textarea></label><br/>
-            <label>Product Image: <input type="file" id="edit-image"></label><br/>
-            <button type="submit">Save</button>
-        </form>
-    </div>
-</div>
-
-<!-- Toast Container for Notifications -->
-<div id="toast-container"></div>
-
-<footer>
-    <div class="floating-button">
-        <span>Hotline: 4168298697</span>
-    </div>
-    <div class="company-info">
-        <!--        <img class="footerLogo" src="../assets/img/hamrogroup.jpeg" alt="Company Logo" />-->
-        <img class="footerLogo" src="../assets/img/hamrogroup3.png" alt="Company Logo"/>
-        <h3>Hamro Group</h3>
-        <p>21B Brenda Cres, Scarborough, ON, Canada</p>
-        <div class="contact">
+    <footer>
+      <div class="footer-wrapper">
+        <div class="floating-button">
+          <span>Hotline: 4168298697</span>
+        </div>
+        <div class="company-info">
+          <img
+            class="footerLogo"
+            src="../assets/img/hamrogroup3.png"
+            alt="Company Logo"
+          />
+          <h3>Hamro Group</h3>
+          <p>21B Brenda Cres, Scarborough, ON, Canada</p>
+          <div class="contact">
             <a href="mailto:dhakalmunal@gmail.com">dhakalmunal@gmail.com</a>
             <a href="tel:4168298697">4168298697</a>
-        </div>
-        <div class="social">
+          </div>
+          <div class="social">
             <ul>
-                <li>
-                    <a href="https://facebook.com" target="_blank">
-                        <img src="../assets/img/facebook.png" alt="facebookIcon">
-                    </a>
-                </li>
-                <li>
-                    <a href="https://instagram.com" target="_blank">
-                        <img src="../assets/img/instagram.png" alt="instagramIcon">
-                    </a>
-                </li>
+              <li>
+                <a href="https://facebook.com" target="_blank">
+                  <img src="../assets/img/facebook.png" alt="facebookIcon" />
+                </a>
+              </li>
+              <li>
+                <a href="https://instagram.com" target="_blank">
+                  <img src="../assets/img/instagram.png" alt="instagramIcon" />
+                </a>
+              </li>
             </ul>
+          </div>
         </div>
-    </div>
-    <div class="map">
-        <iframe src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5767.278665315341!2d-79.26273492488535!3d43.71804384823607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4ce4426940e3b%3A0x9c9bd9f976631ad8!2s21B%20Brenda%20Crescent%2C%20Toronto%2C%20ON%20M1K%203C3!5e0!3m2!1sen!2sca!4v1727014812302!5m2!1sen!2sca"
-                width="600" height="450" style="border:0;" allowfullscreen="" loading="lazy"
-                referrerpolicy="no-referrer-when-downgrade"></iframe>
-    </div>
-</footer>
-<script src="../js/scripts.js"></script>
-<script src="../js/config.js"></script>
-<script>
-    async function loadCategories(categoryId) {
-        const response = await fetch(API_CONFIG.getFullUrl('CATEGORIES'), {
-            headers: API_CONFIG.getHeaders()
+        <div class="map">
+          <iframe
+            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d5767.278665315341!2d-79.26273492488535!3d43.71804384823607!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x89d4ce4426940e3b%3A0x9c9bd9f976631ad8!2s21B%20Brenda%20Crescent%2C%20Toronto%2C%20ON%20M1K%203C3!5e0!3m2!1sen!2sca!4v1727014812302!5m2!1sen!2sca"
+            allowfullscreen=""
+            loading="lazy"
+            referrerpolicy="no-referrer-when-downgrade"
+          ></iframe>
+        </div>
+      </div>
+    </footer>
+
+    <script defer src="../js/scripts.js"></script>
+    <script src="../js/config.js"></script>
+    <script>
+      async function loadCategories(categoryId) {
+        const response = await fetch(API_CONFIG.getFullUrl("CATEGORIES"), {
+          headers: API_CONFIG.getHeaders(),
         });
         if (response.status === 401) {
-            // Token is invalid, redirect to login.html
-            window.location.href = './login.html';
+          // Token is invalid, redirect to login.html
+          window.location.href = "./login.html";
         }
         const categories = await response.json();
 
         const categorySelect = document.getElementById(categoryId);
         categorySelect.innerHTML = '<option value="">Select Category</option>'; // Reset the dropdown
 
-        categories.forEach(category => {
-            const option = document.createElement('option');
-            option.value = category.id; // Assuming 'id' is the category ID
-            option.textContent = category.name;
-            categorySelect.appendChild(option);
+        categories.forEach((category) => {
+          const option = document.createElement("option");
+          option.value = category.id; // Assuming 'id' is the category ID
+          option.textContent = category.name;
+          categorySelect.appendChild(option);
         });
-    }
+      }
 
-    document.getElementById('add-category').addEventListener('change', async function () {
-        await loadSubCategories('add-subcategory', this.value);
-    });
+      document
+        .getElementById("add-category")
+        .addEventListener("change", async function () {
+          await loadSubCategories("add-subcategory", this.value);
+        });
 
-    document.getElementById('add-edit-category').addEventListener('change', async function () {
-        await loadSubCategories('add-edit-subcategory', this.value);
-    });
+      document
+        .getElementById("add-edit-category")
+        .addEventListener("change", async function () {
+          await loadSubCategories("add-edit-subcategory", this.value);
+        });
 
-    async function loadSubCategories(subcategoryId, categoryId) {
+      async function loadSubCategories(subcategoryId, categoryId) {
         // const categoryId = this.value;
         const subcategorySelect = document.getElementById(subcategoryId);
 
         if (categoryId) {
-            const response = await fetch(API_CONFIG.getFullUrl('SUBCATEGORIES') + `/getByCategoryId/${categoryId}`, {
-                headers: API_CONFIG.getHeaders()
-            });
-            if (response.status === 401) {
-                // Token is invalid, redirect to login.html
-                window.location.href = './login.html';
+          const response = await fetch(
+            API_CONFIG.getFullUrl("SUBCATEGORIES") +
+              `/getByCategoryId/${categoryId}`,
+            {
+              headers: API_CONFIG.getHeaders(),
             }
-            const subcategories = await response.json();
+          );
+          if (response.status === 401) {
+            // Token is invalid, redirect to login.html
+            window.location.href = "./login.html";
+          }
+          const subcategories = await response.json();
 
-            subcategorySelect.innerHTML = '<option value="">Select SubCategory</option>'; // Reset subcategories
-            subcategories.forEach(subcategory => {
-                const option = document.createElement('option');
-                option.value = subcategory.id; // Assuming 'id' is the subcategory ID
-                option.textContent = subcategory.name;
-                subcategorySelect.appendChild(option);
-            });
+          subcategorySelect.innerHTML =
+            '<option value="">Select SubCategory</option>'; // Reset subcategories
+          subcategories.forEach((subcategory) => {
+            const option = document.createElement("option");
+            option.value = subcategory.id; // Assuming 'id' is the subcategory ID
+            option.textContent = subcategory.name;
+            subcategorySelect.appendChild(option);
+          });
         } else {
-            subcategorySelect.innerHTML = '<option value="">Select SubCategory</option>'; // Reset if no category selected
+          subcategorySelect.innerHTML =
+            '<option value="">Select SubCategory</option>'; // Reset if no category selected
         }
-    }
+      }
 
-    // Show Add Product Modal and load categories
-    document.getElementById('addProductBtn').onclick = function () {
-        loadCategories('add-category');  // Load categories when modal is opened
-        document.getElementById('addModal').style.display = 'flex';
-    };
+      // Show Add Product Modal and load categories
+      document.getElementById("addProductBtn").onclick = function () {
+        loadCategories("add-category"); // Load categories when modal is opened
+        document.getElementById("addModal").style.display = "flex";
+      };
 
-    // Close Add Product Modal
-    document.getElementById('addModalClose').onclick = function () {
-        document.getElementById('addModal').style.display = 'none';
-    };
+      // Close Add Product Modal
+      document.getElementById("addModalClose").onclick = function () {
+        document.getElementById("addModal").style.display = "none";
+      };
 
-    document.getElementById('add-form').onsubmit = async function (e) {
+      document.getElementById("add-form").onsubmit = async function (e) {
         e.preventDefault();
 
-        const newName = document.getElementById('add-name').value;
-        const newCategory = document.getElementById('add-category').value;
-        const newSubcategory = document.getElementById('add-subcategory').value;
-        const newPrice = document.getElementById('add-price').value;
-        const newSmallDetails = document.getElementById('add-smallDetails').value;
-        const newBigDescription = document.getElementById('add-bigDescription').value;
-        const newImage = document.getElementById('add-image').files[0];
+        const newName = document.getElementById("add-name").value;
+        const newCategory = document.getElementById("add-category").value;
+        const newSubcategory = document.getElementById("add-subcategory").value;
+        const newPrice = document.getElementById("add-price").value;
+        const newSmallDetails =
+          document.getElementById("add-smallDetails").value;
+        const newBigDescription =
+          document.getElementById("add-bigDescription").value;
+        const newImage = document.getElementById("add-image").files[0];
 
         const formData = new FormData();
-        formData.append('name', newName);
+        formData.append("name", newName);
         // formData.append('category', newCategory);
-        formData.append('subcategoryId', newSubcategory);
-        formData.append('price', newPrice);
-        formData.append('smallDetails', newSmallDetails);
-        formData.append('bigDescription', newBigDescription);
+        formData.append("subcategoryId", newSubcategory);
+        formData.append("price", newPrice);
+        formData.append("smallDetails", newSmallDetails);
+        formData.append("bigDescription", newBigDescription);
         if (newImage) {
-            formData.append('image', newImage);
+          formData.append("image", newImage);
         }
 
-        const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS'), {
-            method: 'POST',
-            body: formData,
-            headers: API_CONFIG.getHeaders()
+        const response = await fetch(API_CONFIG.getFullUrl("PRODUCTS"), {
+          method: "POST",
+          body: formData,
+          headers: API_CONFIG.getHeaders(),
         });
 
         if (response.status === 401) {
-            // Token is invalid, redirect to login.html
-            window.location.href = './login.html';
+          // Token is invalid, redirect to login.html
+          window.location.href = "./login.html";
         }
 
-        document.getElementById('addModal').style.display = 'none';
+        document.getElementById("addModal").style.display = "none";
         loadProducts(); // Reload products after adding
-    };
+      };
 
-
-    // Fetch and display products
-    async function loadProducts() {
-        const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS'), {
-            headers: API_CONFIG.getHeaders()
+      // Fetch and display products
+      async function loadProducts() {
+        const response = await fetch(API_CONFIG.getFullUrl("PRODUCTS"), {
+          headers: API_CONFIG.getHeaders(),
         });
         if (response.status === 401) {
-            // Token is invalid, redirect to login.html
-            window.location.href = './login.html';
+          // Token is invalid, redirect to login.html
+          window.location.href = "./login.html";
         }
         const products = await response.json();
-        const productTableBody = document.querySelector('#product-table tbody');
-        productTableBody.innerHTML = '';
+        const productTableBody = document.querySelector("#product-table tbody");
+        productTableBody.innerHTML = "";
 
-        products.forEach(product => {
-            const row = document.createElement('tr');
-            row.innerHTML = `
+        products.forEach((product) => {
+          const row = document.createElement("tr");
+          row.innerHTML = `
                 <td>${product.category}</td>
                 <td>${product.subcategory}</td>
                 <td>${product.name}</td>
@@ -442,34 +523,41 @@
                     <button class="delete-btn" onclick="deleteProduct(${product.id})">Delete</button>
                 </td>
             `;
-            productTableBody.appendChild(row);
+          productTableBody.appendChild(row);
         });
-    }
+      }
 
-    // View Product Modal Logic
-    async function viewProduct(id) {
-        const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS')+`/${id}`, {
-            headers: API_CONFIG.getHeaders()
-        });
+      // View Product Modal Logic
+      async function viewProduct(id) {
+        const response = await fetch(
+          API_CONFIG.getFullUrl("PRODUCTS") + `/${id}`,
+          {
+            headers: API_CONFIG.getHeaders(),
+          }
+        );
 
         if (response.status === 401) {
-            // Token is invalid, redirect to login.html
-            window.location.href = './login.html';
+          // Token is invalid, redirect to login.html
+          window.location.href = "./login.html";
         }
 
         const product = await response.json();
 
         if (product) {
-            document.getElementById('viewModalName').innerText = product.name;
-            document.getElementById('viewModalCategory').innerText = product.category;
-            document.getElementById('viewModalSubcategory').innerText = product.subcategory;
-            document.getElementById('viewModalPrice').innerText = product.price;
-            document.getElementById('viewModalSmallDetails').innerText = product.small_details;
-            document.getElementById('viewModalDetails').innerText = product.big_description;
-            document.getElementById('viewModalImage').src = product.image_path;
+          document.getElementById("viewModalName").innerText = product.name;
+          document.getElementById("viewModalCategory").innerText =
+            product.category;
+          document.getElementById("viewModalSubcategory").innerText =
+            product.subcategory;
+          document.getElementById("viewModalPrice").innerText = product.price;
+          document.getElementById("viewModalSmallDetails").innerText =
+            product.small_details;
+          document.getElementById("viewModalDetails").innerText =
+            product.big_description;
+          document.getElementById("viewModalImage").src = product.image_path;
 
-            const viewModal = document.getElementById('viewModal');
-            viewModal.style.display = 'flex';
+          const viewModal = document.getElementById("viewModal");
+          viewModal.style.display = "flex";
         }
 
         // .then(response => response.json())
@@ -486,86 +574,107 @@
         //     viewModal.style.display = 'flex';
         // });
 
-        document.getElementById('viewModalClose').onclick = function () {
-            document.getElementById('viewModal').style.display = 'none';
+        document.getElementById("viewModalClose").onclick = function () {
+          document.getElementById("viewModal").style.display = "none";
         };
-    }
+      }
 
-    // Edit Product Modal Logic
-    async function editProduct(id, name, categoryId, category, subcategoryId, subcategory, price, smallDetails, bigDescription, imagePath) {
-        document.getElementById('edit-name').value = name;
+      // Edit Product Modal Logic
+      async function editProduct(
+        id,
+        name,
+        categoryId,
+        category,
+        subcategoryId,
+        subcategory,
+        price,
+        smallDetails,
+        bigDescription,
+        imagePath
+      ) {
+        document.getElementById("edit-name").value = name;
 
-        await loadCategories('add-edit-category');
-        await loadSubCategories('add-edit-subcategory', categoryId);
+        await loadCategories("add-edit-category");
+        await loadSubCategories("add-edit-subcategory", categoryId);
 
         document.getElementById("add-edit-category").value = categoryId;
         document.getElementById("add-edit-subcategory").value = subcategoryId;
-        document.getElementById('edit-price').value = price;
-        document.getElementById('edit-smallDetails').value = smallDetails;
-        document.getElementById('edit-bigDescription').value = bigDescription;
-        document.getElementById('edit-image').value = '';
+        document.getElementById("edit-price").value = price;
+        document.getElementById("edit-smallDetails").value = smallDetails;
+        document.getElementById("edit-bigDescription").value = bigDescription;
+        document.getElementById("edit-image").value = "";
 
-        const editModal = document.getElementById('editModal');
-        editModal.style.display = 'flex';
+        const editModal = document.getElementById("editModal");
+        editModal.style.display = "flex";
 
-        document.getElementById('edit-form').onsubmit = async function (e) {
-            e.preventDefault();
-            const newName = document.getElementById('edit-name').value;
-            const newPrice = document.getElementById('edit-price').value;
-            const newSmallDetails = document.getElementById('edit-smallDetails').value;
-            const newBigDescription = document.getElementById('edit-bigDescription').value;
-            const newImage = document.getElementById('edit-image').files[0];
-            const categoryId = document.getElementById('add-edit-category').value;
-            const subcategoryId = document.getElementById('add-edit-subcategory').value;
+        document.getElementById("edit-form").onsubmit = async function (e) {
+          e.preventDefault();
+          const newName = document.getElementById("edit-name").value;
+          const newPrice = document.getElementById("edit-price").value;
+          const newSmallDetails =
+            document.getElementById("edit-smallDetails").value;
+          const newBigDescription = document.getElementById(
+            "edit-bigDescription"
+          ).value;
+          const newImage = document.getElementById("edit-image").files[0];
+          const categoryId = document.getElementById("add-edit-category").value;
+          const subcategoryId = document.getElementById(
+            "add-edit-subcategory"
+          ).value;
 
-            const formData = new FormData();
-            formData.append('name', newName);
-            formData.append('price', newPrice);
-            formData.append('smallDetails', newSmallDetails);
-            formData.append('bigDescription', newBigDescription);
-            formData.append('categoryId', categoryId);
-            formData.append('subcategoryId', subcategoryId);
-            if (newImage) {
-                formData.append('image', newImage);
+          const formData = new FormData();
+          formData.append("name", newName);
+          formData.append("price", newPrice);
+          formData.append("smallDetails", newSmallDetails);
+          formData.append("bigDescription", newBigDescription);
+          formData.append("categoryId", categoryId);
+          formData.append("subcategoryId", subcategoryId);
+          if (newImage) {
+            formData.append("image", newImage);
+          }
+
+          const response = await fetch(
+            API_CONFIG.getFullUrl("PRODUCTS") + `/${id}`,
+            {
+              method: "PUT",
+              body: formData,
+              headers: API_CONFIG.getHeaders(),
             }
+          );
 
-            const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS')+`/${id}`, {
-                method: 'PUT',
-                body: formData,
-                headers: API_CONFIG.getHeaders()
-            });
+          if (response.status === 401) {
+            // Token is invalid, redirect to login.html
+            window.location.href = "./login.html";
+          }
 
-            if (response.status === 401) {
-                // Token is invalid, redirect to login.html
-                window.location.href = './login.html';
-            }
-
-            document.getElementById('editModal').style.display = 'none';
-            loadProducts(); // Reload products after editing
+          document.getElementById("editModal").style.display = "none";
+          loadProducts(); // Reload products after editing
         };
 
-        document.getElementById('editModalClose').onclick = function () {
-            document.getElementById('editModal').style.display = 'none';
+        document.getElementById("editModalClose").onclick = function () {
+          document.getElementById("editModal").style.display = "none";
         };
-    }
+      }
 
-    async function deleteProduct(id) {
-        if (confirm('Are you sure you want to delete this product?')) {
-            const response = await fetch(API_CONFIG.getFullUrl('PRODUCTS')+`/${id}`, {
-                method: 'DELETE',
-                headers: API_CONFIG.getHeaders()
-            });
-            if (response.status === 401) {
-                // Token is invalid, redirect to login.html
-                window.location.href = './login.html';
+      async function deleteProduct(id) {
+        if (confirm("Are you sure you want to delete this product?")) {
+          const response = await fetch(
+            API_CONFIG.getFullUrl("PRODUCTS") + `/${id}`,
+            {
+              method: "DELETE",
+              headers: API_CONFIG.getHeaders(),
             }
-            loadProducts();
+          );
+          if (response.status === 401) {
+            // Token is invalid, redirect to login.html
+            window.location.href = "./login.html";
+          }
+          loadProducts();
         }
-    }
+      }
 
-    // Load products when the page loads
-    window.onload = loadProducts;
-</script>
-
-</body>
+      // Load products when the page loads
+      window.onload = loadProducts;
+    </script>
+  </body>
 </html>

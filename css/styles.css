@@ -17,13 +17,9 @@ p, span {
 
 main {
     flex-grow: 1;
-    padding: 20px;
+    padding: 10px;
     text-align: center;
     background-color: #f3f2ee;
-}
-
-.mainContent {
-    padding: 10px 50px;
 }
 
 .mainContent {
@@ -32,6 +28,7 @@ main {
     row-gap: 20px;
     max-width: 1200px;
     margin: 0 auto;
+    padding: 10px 0;
 }
 
 .content-area {
@@ -40,4 +37,29 @@ main {
     row-gap: 16 px;
     line-height: 1.5em;
     text-align: left;
+}
+
+.table-wrapper {
+    overflow: auto;
+    width: 100%;
+}
+
+@media (min-width: 600px) {
+    .mainContent {
+        padding: 10px 20px;
+    }
+
+    main {
+        padding: 15px;
+    }
+}
+
+@media (min-width: 900px){
+    .mainContent {
+        padding: 10px 50px;
+    }
+
+    main {
+        padding: 20px;
+    }
 }
