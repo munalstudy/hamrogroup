@@ -86,6 +86,20 @@
       h3 {
         margin: 10px 0;
       }
+
+      .search-container {
+        margin: 20px auto;
+        max-width: 600px;
+        padding: 10px;
+      }
+
+      #searchInput {
+        width: 100%;
+        padding: 10px;
+        font-size: 16px;
+        border: 1px solid #ddd;
+        border-radius: 4px;
+      }
     </style>
   </head>
 
@@ -107,6 +121,9 @@
     </header>
 
     <main>
+      <div class="search-container">
+        <input type="text" id="searchInput" placeholder="Search products...">
+      </div>
       <section class="product-container" id="productContainer"></section>
     </main>
 
@@ -163,69 +180,89 @@
         const products = await response.json();
 
         const productContainer = document.getElementById("productContainer");
+        const searchInput = document.getElementById("searchInput");
 
-        // Group products by category
-        const groupedProducts = products.reduce((acc, product) => {
-          if (!acc[product.category]) {
-            acc[product.category] = [];
-          }
-          acc[product.category].push(product);
-          return acc;
-        }, {});
+        function renderProducts(filteredProducts) {
+          productContainer.innerHTML = ''; // Clear existing content
 
-        // Create category sections
-        for (const [category, items] of Object.entries(groupedProducts)) {
-          const categorySection = document.createElement("div");
-          categorySection.classList.add("category-section");
-
-          const categoryTitle = document.createElement("h2");
-          categoryTitle.textContent = category;
-          categorySection.appendChild(categoryTitle);
-
-          const subcategoryContainer = document.createElement("div");
-          subcategoryContainer.classList.add("subcategory-container");
-
-          // Group by subcategory
-          const groupedSubcategories = items.reduce((acc, item) => {
-            if (!acc[item.subcategory]) {
-              acc[item.subcategory] = [];
+          // Group products by category
+          const groupedProducts = filteredProducts.reduce((acc, product) => {
+            if (!acc[product.category]) {
+              acc[product.category] = [];
             }
-            acc[item.subcategory].push(item);
+            acc[product.category].push(product);
             return acc;
           }, {});
 
-          // Create subcategory sections
-          for (const [subcategory, subItems] of Object.entries(
-            groupedSubcategories
-          )) {
-            const subcategorySection = document.createElement("div");
-            subcategorySection.classList.add("subcategory-section");
+          // Create category sections
+          for (const [category, items] of Object.entries(groupedProducts)) {
+            const categorySection = document.createElement("div");
+            categorySection.classList.add("category-section");
 
-            const subcategoryTitle = document.createElement("h3");
-            subcategoryTitle.textContent = subcategory;
-            subcategorySection.appendChild(subcategoryTitle);
+            const categoryTitle = document.createElement("h2");
+            categoryTitle.textContent = category;
+            categorySection.appendChild(categoryTitle);
 
-            const productGrid = document.createElement("div");
-            productGrid.classList.add("product-grid");
+            const subcategoryContainer = document.createElement("div");
+            subcategoryContainer.classList.add("subcategory-container");
 
-            subItems.forEach((product) => {
-              const productCard = `
-                    <div class="product-card">
-                        <img src="${product.image_path}" alt="${product.name}" loading="lazy"/>
-                        <h4>${product.name}</h4>
-                        <p>${product.small_details}</p>
-                        <p>$${product.price}</p>
-                    </div>`;
-              productGrid.innerHTML += productCard;
-            });
+            // Group by subcategory
+            const groupedSubcategories = items.reduce((acc, item) => {
+              if (!acc[item.subcategory]) {
+                acc[item.subcategory] = [];
+              }
+              acc[item.subcategory].push(item);
+              return acc;
+            }, {});
 
-            subcategorySection.appendChild(productGrid);
-            subcategoryContainer.appendChild(subcategorySection);
+            // Create subcategory sections
+            for (const [subcategory, subItems] of Object.entries(groupedSubcategories)) {
+              const subcategorySection = document.createElement("div");
+              subcategorySection.classList.add("subcategory-section");
+
+              const subcategoryTitle = document.createElement("h3");
+              subcategoryTitle.textContent = subcategory;
+              subcategorySection.appendChild(subcategoryTitle);
+
+              const productGrid = document.createElement("div");
+              productGrid.classList.add("product-grid");
+
+              subItems.forEach((product) => {
+                const productCard = `
+                  <div class="product-card">
+                    <img src="${product.image_path}" alt="${product.name}" loading="lazy"/>
+                    <h4>${product.name}</h4>
+                    <p>${product.small_details}</p>
+                    <p>$${product.price}</p>
+                  </div>`;
+                productGrid.innerHTML += productCard;
+              });
+
+              subcategorySection.appendChild(productGrid);
+              subcategoryContainer.appendChild(subcategorySection);
+            }
+
+            categorySection.appendChild(subcategoryContainer);
+            productContainer.appendChild(categorySection);
           }
-
-          categorySection.appendChild(subcategoryContainer);
-          productContainer.appendChild(categorySection);
         }
+
+        function filterProducts(searchTerm) {
+          return products.filter(product =>
+                  product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  product.small_details.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
+                  product.subcategory.toLowerCase().includes(searchTerm.toLowerCase())
+          );
+        }
+
+        searchInput.addEventListener('input', (e) => {
+          const filteredProducts = filterProducts(e.target.value);
+          renderProducts(filteredProducts);
+        });
+
+        // Initial render
+        renderProducts(products);
       }
 
       displayProducts();
