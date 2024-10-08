@@ -34,7 +34,7 @@ main {
 .content-area {
     display: flex;
     flex-direction: column;
-    row-gap: 16 px;
+    row-gap: 16px;
     line-height: 1.5em;
     text-align: left;
 }
@@ -54,21 +54,21 @@ main {
     border-radius: 8px;
     max-height: 80vh;
     overflow: auto;
-  }
-  
-  .form-group {
+}
+
+.form-group {
     margin: 0 auto 15px;
     width: 350px;
     text-align: left;
-  }
-  
-  .form-label {
+}
+
+.form-label {
     margin-bottom: 5px;
     font-size: 14px;
     color: #333;
-  }
-  
-  .form-input {
+}
+
+.form-input {
     width: 100%;
     padding: 8px;
     border: 1px solid #ccc;
@@ -76,9 +76,9 @@ main {
     font-size: 14px;
     display: block;
     margin: 0 auto;
-  }
-  
-  .form-button {
+}
+
+.form-button {
     padding: 10px;
     background-color: #007bff;
     color: white;
@@ -89,14 +89,14 @@ main {
     width: 350px;
     text-align: center;
     margin: 0 auto;
-  }
-  
-  .form-button:hover {
-    background-color: #0056b3;
-  }
+}
 
-   /* Responsive Modal Styles */
-   .modal {
+.form-button:hover {
+    background-color: #0056b3;
+}
+
+/* Responsive Modal Styles */
+.modal {
     display: none;
     position: fixed;
     z-index: 9999;
@@ -107,9 +107,9 @@ main {
     background-color: rgba(0, 0, 0, 0.5);
     justify-content: center;
     align-items: center;
-  }
+}
 
-  .modal-content {
+.modal-content {
     background-color: white;
     padding: 20px;
     border-radius: 10px;
@@ -118,24 +118,24 @@ main {
     text-align: center;
     position: relative;
     word-wrap: break-word;
-  }
+}
 
-  .close {
+.close {
     position: absolute;
     top: 10px;
     right: 20px;
     font-size: 24px;
     cursor: pointer;
-  }
+}
 
-  .modal img {
+.modal img {
     /*width: 100%; !* Make image responsive *!*/
     width: 50%;
     height: auto;
     margin-bottom: 20px;
-  }
+}
 
-  .empty-area {
+.empty-area {
     background: white;
     width: fit-content;
     margin: 0 auto;
@@ -144,8 +144,7 @@ main {
     margin-bottom: 30px;
     width: 50%;
     min-width: 350px;
-  }
-
+}
 
 
 /* Close button styling */
@@ -157,22 +156,22 @@ main {
     top: 15px;
     right: 20px;
     cursor: pointer;
-  }
-  
-  .close:hover,
-  .close:focus {
+}
+
+.close:hover,
+.close:focus {
     color: #000;
-  }
-  
-  /* Modal title styling */
-  .modal-title {
+}
+
+/* Modal title styling */
+.modal-title {
     font-size: 24px;
     margin-bottom: 20px;
     text-align: center;
-  }
-  
-  /* Image styling */
-  .modal-image {
+}
+
+/* Image styling */
+.modal-image {
     width: 100%;
     max-width: 300px;
     height: auto;
@@ -180,22 +179,35 @@ main {
     margin: 0 auto 20px;
     border-radius: 8px;
     box-shadow: 0 2px 4px rgba(0, 0, 0, 0.2);
-  }
-  
-  /* Modal text styling */
-  .modal-text {
+}
+
+/* Modal text styling */
+.modal-text {
     font-size: 16px;
     line-height: 1.5;
     color: #333;
     margin-bottom: 15px;
-  }
-  
-  .modal-text strong {
+}
+
+.modal-text strong {
     font-weight: bold;
     color: #000;
-  }
-  
-  
+}
+
+.hamburger {
+    display: none;
+    font-size: 30px;
+    background: none;
+    border: none;
+    color: white;
+    cursor: pointer;
+    margin-left: auto;
+}
+
+.nav-links {
+    display: flex;
+}
+
 
 @media (min-width: 600px) {
     .mainContent {
@@ -209,23 +221,44 @@ main {
     .modal-content {
         width: 100%;
         padding: 10px;
-      }
-    
-      .modal-title {
+    }
+
+    .modal-title {
         font-size: 20px;
-      }
-    
-      .modal-text {
+    }
+
+    .modal-text {
         font-size: 14px;
-      }
+    }
 }
 
-@media (min-width: 900px){
+@media (min-width: 900px) {
     .mainContent {
         padding: 10px 50px;
     }
 
     main {
         padding: 20px;
+    }
+}
+
+@media (max-width: 600px) {
+    .nav-links {
+        display: none;
+    }
+
+    nav {
+        display: none;
+        flex-direction: column;
+        width: 100%;
+        margin-top: 10px;
+    }
+
+    .hamburger {
+        display: block; /* Show the hamburger icon on mobile */
+    }
+
+    nav.active {
+        display: flex;
     }
 }

@@ -1,6 +1,7 @@
 // config.js
 const API_CONFIG = {
-    BASE_URL: 'http://localhost:3001',
+    BASE_URL: 'https://hamrogroup.ca',
+    // BASE_URL: 'http://localhost:3000',
     ENDPOINTS: {
         PRODUCTS: '/api/products',
         CATEGORIES: '/api/categories',

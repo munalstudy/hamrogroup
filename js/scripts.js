@@ -28,3 +28,17 @@ updateMainMarginTop();
 
 // Attach event listener for window resize
 window.addEventListener('resize', updateMainMarginTop);
+
+const hamburger = document.querySelector('.hamburger');
+const navLinks = document.querySelector('nav');
+
+hamburger.addEventListener('click', (e) => {
+    e.stopPropagation();
+    navLinks.classList.toggle('active');
+});
+
+document.body.addEventListener('click', (e) => {
+    if (navLinks.classList.contains('active')) {
+        navLinks.classList.remove('active');
+    }
+});
