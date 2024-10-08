@@ -26,79 +26,139 @@
       rel="stylesheet"
     />
     <style>
-      /* body {
-            font-family: 'Roboto', sans-serif;
-            margin: 0;
-            padding: 0;
-            background-color: #f8f8f8;
-            color: #333;
-        } */
-
-      .product-container {
-        padding: 20px;
-      }
-
-      .category-section {
-        margin-bottom: 40px;
-        padding: 20px;
-        background-color: #ffffff;
-        border-radius: 8px;
-        box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
-      }
-
-      .subcategory-section {
-        margin-top: 20px;
-      }
-
-      .product-grid {
-        display: flex; /* Use flexbox for alignment */
-        flex-wrap: wrap; /* Allow items to wrap to the next line */
-        justify-content: center; /* Center items horizontally */
-        gap: 20px; /* Space between items */
-        background-color: #d8d8e7;
-        padding: 20px;
-      }
-
-      .product-card {
-        flex: 0 0 200px; /* Set a fixed width for each card */
-        border: 1px solid #1e0202;
-        border-radius: 8px;
-        background-color: #fff;
-        padding: 10px;
-        text-align: center; /* Center text within the card */
-      }
-
-      .product-card:hover {
-        transform: translateY(-5px);
-        box-shadow: 0 4px 10px rgba(0, 0, 0, 0.2);
-      }
-
-      .product-card img {
-        max-width: 100%;
-        border-radius: 8px;
-      }
-
-      h3,
-      h2 {
-        color: #1e0202;
-      }
-
-      h3 {
-        margin: 10px 0;
+      :root {
+        --primary-color: #466690;
+        --secondary-color: #f8f9fa;
+        --accent-color: #34a853;
+        --text-color: #202124;
+        --border-radius: 8px;
+        --box-shadow: 0 2px 5px rgba(0, 0, 0, 0.1);
       }
 
       .search-container {
-        margin: 20px auto;
         max-width: 600px;
-        padding: 10px;
+        margin: 2rem auto;
+        padding: 0 1rem;
       }
 
       #searchInput {
         width: 100%;
-        padding: 10px;
+        padding: 1rem;
+        border: 2px solid #ddd;
+        border-radius: var(--border-radius);
         font-size: 16px;
-        border: 1px solid #ddd;
-        border-radius: 4px;
+        transition: border-color 0.3s;
+      }
+
+      #searchInput:focus {
+        outline: none;
+        border-color: var(--primary-color);
+      }
+
+      .product-container {
+        max-width: 1200px;
+        margin: 0 auto;
+        padding: 0 1rem;
+      }
+
+      .category-section {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        margin-bottom: 2rem;
+        overflow: hidden;
+        position: relative;
+      }
+
+      .category-section::before {
+        content: "";
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        opacity: 0.04;
+        z-index: 0;
+      }
+
+      .category-section h2 {
+        padding: 1rem;
+        margin: 0;
+        color: white;
+        position: relative;
+        z-index: 1;
+      }
+
+      .subcategory-section {
+        padding: 1rem;
+      }
+
+      .subcategory-section h3 {
+        color: var(--accent-color);
+        border-bottom: 2px solid var(--accent-color);
+        padding-bottom: 0.5rem;
+      }
+
+      .product-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+      gap: 1.5rem;
+      padding: 1rem;
+    }
+
+    .product-grid:has(:nth-child(1):last-child),
+      .product-grid:has(:nth-child(2):last-child) {
+        grid-template-columns: repeat(auto-fit, 250px);
+        justify-content: center;
+      }
+
+      .product-card {
+        background-color: white;
+        border-radius: var(--border-radius);
+        box-shadow: var(--box-shadow);
+        overflow: hidden;
+        transition: transform 0.3s;
+        display: flex;
+        flex-direction: column;
+        justify-content: center;
+        min-height: 220px;
+        z-index: 5;
+        padding: 10px;
+      }
+
+      .product-card:hover {
+        transform: translateY(-5px);
+      }
+
+      .product-card img {
+        width: 100%;
+        height: 150px;
+        object-fit: contain;
+      }
+
+      .product-card h4 {
+        margin: 0.5rem 0;
+        color: var(--primary-color);
+      }
+
+      .product-card p {
+        margin: 0.5rem 0;
+        padding: 0 10px;
+      }
+
+      .product-info {
+        padding: 1rem;
+      }
+
+      .price {
+        font-weight: bold;
+        color: var(--accent-color);
+      }
+
+      @media (max-width: 768px) {
+        .product-grid {
+          grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+        }
       }
     </style>
   </head>
@@ -121,8 +181,47 @@
     </header>
 
     <main>
+      <!-- View Product Modal -->
+      <div id="viewModal" class="modal">
+        <div class="modal-content">
+          <span class="close" id="viewModalClose">&times;</span>
+          <h2 class="modal-title">Product Details</h2>
+          <div class="modal-body">
+            <img
+              id="viewModalImage"
+              class="modal-image"
+              src=""
+              alt="Product Image"
+            />
+            <p class="modal-text">
+              <strong>Name:</strong>
+              <span id="viewModalName"></span>
+            </p>
+            <p class="modal-text">
+              <strong>Price:</strong>
+              <span id="viewModalPrice"></span>
+            </p>
+            <p class="modal-text">
+              <strong>Category:</strong>
+              <span id="viewModalCategory"></span>
+            </p>
+            <p class="modal-text">
+              <strong>SubCategory:</strong>
+              <span id="viewModalSubcategory"></span>
+            </p>
+            <p class="modal-text">
+              <strong>Details:</strong>
+              <span id="viewModalSmallDetails"></span>
+            </p>
+            <p class="modal-text">
+              <strong>Description:</strong>
+              <span id="viewModalDetails"></span>
+            </p>
+          </div>
+        </div>
+      </div>
       <div class="search-container">
-        <input type="text" id="searchInput" placeholder="Search products...">
+        <input type="text" id="searchInput" placeholder="Search products..." />
       </div>
       <section class="product-container" id="productContainer"></section>
     </main>
@@ -141,13 +240,18 @@
           <h3>Hamro Group</h3>
           <p>2628 Eglinton Ave E, Scarborough, ON, Canada</p>
           <div class="contact">
-            <a href="mailto:dineshsapkota5@gmail.com">dineshsapkota5@gmail.com</a>
+            <a href="mailto:dineshsapkota5@gmail.com"
+              >dineshsapkota5@gmail.com</a
+            >
             <a href="tel:6477794246">6477794246</a>
           </div>
           <div class="social">
             <ul>
               <li>
-                <a href="https://www.facebook.com/profile.php?id=61566374786793" target="_blank">
+                <a
+                  href="https://www.facebook.com/profile.php?id=61566374786793"
+                  target="_blank"
+                >
                   <img src="../assets/img/facebook.png" alt="facebookIcon" />
                 </a>
               </li>
@@ -173,6 +277,126 @@
     <script defer src="../js/scripts.js"></script>
     <script src="../js/config.js"></script>
     <script>
+      const viewModal = document.getElementById("viewModal");
+      const viewModalClose = document.getElementById("viewModalClose");
+
+      // Close modal when clicking the close button
+      viewModalClose.onclick = function () {
+        viewModal.style.display = "none";
+      };
+
+      // Close modal when clicking outside of it
+      window.onclick = function (event) {
+        if (event.target == viewModal) {
+          viewModal.style.display = "none";
+        }
+      };
+
+      function showProductModal(product) {
+        if (!product) {
+          return;
+        }
+        if (product.image_path) {
+          document.getElementById("viewModalImage").style.display = "block";
+        } else {
+          document.getElementById("viewModalImage").style.display = "none";
+        }
+        document.getElementById("viewModalImage").src =
+          product.image_path || "";
+        document.getElementById("viewModalCategory").textContent =
+          product.category;
+        document.getElementById("viewModalSubcategory").textContent =
+          product.subcategory;
+        document.getElementById("viewModalName").textContent = product.name;
+        document.getElementById(
+          "viewModalPrice"
+        ).textContent = `$${product.price}`;
+        document.getElementById("viewModalSmallDetails").textContent =
+          product.small_details;
+        document.getElementById("viewModalDetails").textContent =
+          product.details || "No detailed description available.";
+
+        viewModal.style.display = "flex";
+      }
+
+      // First, add a <style> tag to the document head for our dynamic styles
+      const styleElement = document.createElement("style");
+      document.head.appendChild(styleElement);
+
+      // Define a set of visually appealing default colors
+      const DEFAULT_COLORS = [
+        "#1a73e8", // Google Blue
+        // "#ea4335", // Google Red
+        // "#fbbc05", // Google Yellow
+        "#009688", // Teal
+        "#3f51b5", // Indigo
+        "#673ab7", // Deep Purple
+        "#34a853", // Google Green
+        "#795548", // Brown
+        "#607d8b", // Blue Grey
+        "#e91e63", // Pink
+        "#9c27b0", // Purple
+        "#2196f3", // Light Blue
+        "#00bcd4", // Cyan
+        "#4caf50", // Light Green
+        "#cddc39", // Lime
+        "#ff5722", // Deep Orange
+      ];
+
+      let colorIndex = 0;
+
+      function getNextColor() {
+        // If we still have default colors, use them
+        if (colorIndex < DEFAULT_COLORS.length) {
+          return DEFAULT_COLORS[colorIndex++];
+        }
+
+        // Otherwise, generate a random color
+        return getRandomDarkColor();
+      }
+
+      function getRandomDarkColor() {
+        const hue = Math.floor(Math.random() * 360);
+        return `hsl(${hue}, 70%, 30%)`; // Saturation 70%, Lightness 30% for darker colors
+      }
+
+      function applyColors() {
+        // Reset color index when reapplying colors
+        colorIndex = 0;
+
+        const categorySections = document.querySelectorAll(".category-section");
+        let styleRules = "";
+
+        categorySections.forEach((section, index) => {
+          const color = getNextColor();
+          const categoryId = `category-${index}`;
+
+          // Add a unique identifier to the section
+          section.id = categoryId;
+
+          // Add the background color to the h2 element directly
+          const h2 = section.querySelector("h2");
+          h2.style.backgroundColor = color;
+
+          // Create CSS rule for the semi-transparent background
+          styleRules += `
+      #${categoryId}::before {
+        content: '';
+        position: absolute;
+        top: 0;
+        left: 0;
+        right: 0;
+        bottom: 0;
+        background-color: ${color};
+        opacity: 0.04;
+        z-index: 0;
+      }
+    `;
+        });
+
+        // Update the style element with all our new rules
+        styleElement.textContent = styleRules;
+      }
       async function displayProducts() {
         const response = await fetch(API_CONFIG.getFullUrl("PRODUCTS"), {
           headers: API_CONFIG.getHeaders(),
@@ -183,7 +407,16 @@
         const searchInput = document.getElementById("searchInput");
 
         function renderProducts(filteredProducts) {
-          productContainer.innerHTML = ''; // Clear existing content
+          productContainer.innerHTML = ""; // Clear existing content
+
+          if(filteredProducts.length === 0) {
+            productContainer.innerHTML = `
+              <div class="empty-area">
+                <span class="empty-text">No products found</h2>
+              </div>
+            `;
+            return;
+          }
 
           // Group products by category
           const groupedProducts = filteredProducts.reduce((acc, product) => {
@@ -216,7 +449,9 @@
             }, {});
 
             // Create subcategory sections
-            for (const [subcategory, subItems] of Object.entries(groupedSubcategories)) {
+            for (const [subcategory, subItems] of Object.entries(
+              groupedSubcategories
+            )) {
               const subcategorySection = document.createElement("div");
               subcategorySection.classList.add("subcategory-section");
 
@@ -228,14 +463,25 @@
               productGrid.classList.add("product-grid");
 
               subItems.forEach((product) => {
-                const productCard = `
-                  <div class="product-card">
-                    <img src="${product.image_path}" alt="${product.name}" loading="lazy"/>
-                    <h4>${product.name}</h4>
-                    <p>${product.small_details}</p>
-                    <p>$${product.price}</p>
-                  </div>`;
-                productGrid.innerHTML += productCard;
+                const productCard = document.createElement("div");
+                productCard.classList.add("product-card");
+                productCard.innerHTML = `
+                  ${
+                    product.image_path
+                      ? `<img src="${product.image_path}" alt="${product.name}" loading="lazy"/>`
+                      : ""
+                  }
+                  <h4>${product.name}</h4>
+                  <p>${product.small_details}</p>
+                  <p>$${product.price}</p>
+                `;
+
+                // Add click event to show modal
+                productCard.addEventListener("click", () =>
+                  showProductModal(product)
+                );
+
+                productGrid.appendChild(productCard);
               });
 
               subcategorySection.appendChild(productGrid);
@@ -245,18 +491,26 @@
             categorySection.appendChild(subcategoryContainer);
             productContainer.appendChild(categorySection);
           }
+          applyColors();
         }
 
         function filterProducts(searchTerm) {
-          return products.filter(product =>
-                  product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  product.small_details.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  product.category.toLowerCase().includes(searchTerm.toLowerCase()) ||
-                  product.subcategory.toLowerCase().includes(searchTerm.toLowerCase())
+          return products.filter(
+            (product) =>
+              product.name.toLowerCase().includes(searchTerm.toLowerCase()) ||
+              product.small_details
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
+              product.category
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase()) ||
+              product.subcategory
+                .toLowerCase()
+                .includes(searchTerm.toLowerCase())
           );
         }
 
-        searchInput.addEventListener('input', (e) => {
+        searchInput.addEventListener("input", (e) => {
           const filteredProducts = filterProducts(e.target.value);
           renderProducts(filteredProducts);
         });

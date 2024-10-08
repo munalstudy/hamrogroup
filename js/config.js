@@ -1,6 +1,6 @@
 // config.js
 const API_CONFIG = {
-    BASE_URL: 'http://localhost:3000',
+    BASE_URL: 'http://localhost:3001',
     ENDPOINTS: {
         PRODUCTS: '/api/products',
         CATEGORIES: '/api/categories',
