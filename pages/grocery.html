@@ -313,7 +313,7 @@
         document.getElementById("viewModalName").textContent = product.name;
         document.getElementById(
           "viewModalPrice"
-        ).textContent = `$${product.price}`;
+        ).textContent = `CAD ${product.price}`;
         document.getElementById("viewModalSmallDetails").textContent =
           product.small_details;
         document.getElementById("viewModalDetails").textContent =
@@ -476,7 +476,7 @@
                   }
                   <h4>${product.name}</h4>
                   <p>${product.small_details}</p>
-                  <p>$${product.price}</p>
+                  <p>CAD ${product.price}</p>
                 `;
 
                 // Add click event to show modal
