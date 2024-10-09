@@ -229,7 +229,7 @@
                     <label for="add-category" class="form-label"
                       >Category:</label
                     >
-                    <select id="add-category" class="form-input">
+                    <select id="add-category" class="form-input" required>
                       <option value="">Select Category</option>
                       <!-- Categories will be loaded dynamically -->
                     </select>
@@ -239,7 +239,7 @@
                     <label for="add-subcategory" class="form-label"
                       >SubCategory:</label
                     >
-                    <select id="add-subcategory" class="form-input">
+                    <select id="add-subcategory" class="form-input" required>
                       <option value="">Select SubCategory</option>
                       <!-- Subcategories will be loaded dynamically -->
                     </select>
@@ -249,7 +249,7 @@
                     <label for="add-name" class="form-label"
                       >Product Name:</label
                     >
-                    <input type="text" id="add-name" class="form-input" />
+                    <input type="text" id="add-name" class="form-input" required/>
                   </div>
 
                   <div class="form-group">
@@ -259,6 +259,7 @@
                       id="add-price"
                       class="form-input"
                       step="0.01"
+                      required
                     />
                   </div>
 
@@ -270,6 +271,7 @@
                       type="text"
                       id="add-smallDetails"
                       class="form-input"
+                      required
                     />
                   </div>
 
@@ -280,6 +282,7 @@
                     <textarea
                       id="add-bigDescription"
                       class="form-input"
+                      required
                     ></textarea>
                   </div>
 
@@ -305,14 +308,14 @@
                     <label for="edit-name" class="form-label"
                       >Product Name:</label
                     >
-                    <input type="text" id="edit-name" class="form-input" />
+                    <input type="text" id="edit-name" class="form-input" required />
                   </div>
 
                   <div class="form-group">
                     <label for="add-edit-category" class="form-label"
                       >Category:</label
                     >
-                    <select id="add-edit-category" class="form-input">
+                    <select id="add-edit-category" class="form-input" required>
                       <option value="">Select Category</option>
                       <!-- Categories will be loaded dynamically -->
                     </select>
@@ -322,7 +325,7 @@
                     <label for="add-edit-subcategory" class="form-label"
                       >SubCategory:</label
                     >
-                    <select id="add-edit-subcategory" class="form-input">
+                    <select id="add-edit-subcategory" class="form-input" required>
                       <option value="">Select SubCategory</option>
                       <!-- Subcategories will be loaded dynamically -->
                     </select>
@@ -335,6 +338,7 @@
                       id="edit-price"
                       class="form-input"
                       step="0.01"
+                      required
                     />
                   </div>
 
@@ -346,6 +350,7 @@
                       type="text"
                       id="edit-smallDetails"
                       class="form-input"
+                      required
                     />
                   </div>
 
@@ -356,6 +361,7 @@
                     <textarea
                       id="edit-bigDescription"
                       class="form-input"
+                      required
                     ></textarea>
                   </div>
 
