@@ -278,6 +278,15 @@
                             </div>
 
                             <div class="form-group">
+                                <label for="add-unit" class="form-label">Unit:</label>
+                                <input
+                                        type="text"
+                                        id="add-unit"
+                                        class="form-input"
+                                />
+                            </div>
+
+                            <div class="form-group">
                                 <label for="add-smallDetails" class="form-label"
                                 >Small Details:</label
                                 >
@@ -352,6 +361,15 @@
                                         class="form-input"
                                         step="0.01"
                                         required
+                                />
+                            </div>
+
+                            <div class="form-group">
+                                <label for="edit-unit" class="form-label">Unit:</label>
+                                <input
+                                        type="text"
+                                        id="edit-unit"
+                                        class="form-input"
                                 />
                             </div>
 
@@ -525,6 +543,7 @@
         const newCategory = document.getElementById("add-category").value;
         const newSubcategory = document.getElementById("add-subcategory").value;
         const newPrice = document.getElementById("add-price").value;
+        const newUnit = document.getElementById("add-unit").value;
         const newSmallDetails =
             document.getElementById("add-smallDetails").value;
         const newBigDescription =
@@ -536,6 +555,7 @@
         // formData.append('category', newCategory);
         formData.append("subcategoryId", newSubcategory);
         formData.append("price", newPrice);
+        formData.append("unit", newUnit);
         formData.append("smallDetails", newSmallDetails);
         formData.append("bigDescription", newBigDescription);
         if (newImage) {
@@ -574,6 +594,10 @@
 
         products.forEach((product) => {
             const row = document.createElement("tr");
+            // Check if the unit is not null and not empty
+            if (product.unit && product.unit.trim() !== "") {
+                product.price = product.price + "/" + product.unit;
+            }
             row.innerHTML = `
                 <td>${product.category}</td>
                 <td>${product.subcategory}</td>
@@ -581,7 +605,7 @@
                 <td>${product.price}</td>
                 <td>
                     <button class="view-btn" onclick="viewProduct(${product.id})">View</button>
-                    <button class="edit-btn" onclick="editProduct(${product.id}, '${product.name}', ${product.categoryId}, '${product.category}', ${product.subcategoryId}, '${product.subcategory}', ${product.price}, '${product.small_details}', '${product.big_description}', '${product.image_path}')">Edit</button>
+                    <button class="edit-btn" onclick="editProduct(${product.id}, '${product.name}', ${product.categoryId}, '${product.category}', ${product.subcategoryId}, '${product.subcategory}', ${product.price}, '${product.unit}', '${product.small_details}', '${product.big_description}', '${product.image_path}')">Edit</button>
                     <button class="delete-btn" onclick="deleteProduct(${product.id})">Delete</button>
                 </td>
             `;
@@ -611,7 +635,13 @@
                 product.category;
             document.getElementById("viewModalSubcategory").innerText =
                 product.subcategory;
-            document.getElementById("viewModalPrice").innerText = product.price;
+            // Check if the unit is not null and not empty
+            if (product.unit && product.unit.trim() !== "") {
+                document.getElementById("viewModalPrice").innerText =
+                    product.price + "/" + product.unit;
+            } else {
+                document.getElementById("viewModalPrice").innerText = product.price;
+            }
             document.getElementById("viewModalSmallDetails").innerText =
                 product.small_details;
             document.getElementById("viewModalDetails").innerText =
@@ -677,6 +707,7 @@
             e.preventDefault();
             const newName = document.getElementById("edit-name").value;
             const newPrice = document.getElementById("edit-price").value;
+            const newUnit = document.getElementById("edit-unit").value;
             const newSmallDetails =
                 document.getElementById("edit-smallDetails").value;
             const newBigDescription = document.getElementById(
@@ -691,6 +722,7 @@
             const formData = new FormData();
             formData.append("name", newName);
             formData.append("price", newPrice);
+            formData.append("unit", newUnit);
             formData.append("smallDetails", newSmallDetails);
             formData.append("bigDescription", newBigDescription);
             formData.append("categoryId", categoryId);

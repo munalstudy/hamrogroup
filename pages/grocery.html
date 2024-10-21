@@ -314,6 +314,10 @@
         document.getElementById("viewModalSubcategory").textContent =
           product.subcategory;
         document.getElementById("viewModalName").textContent = product.name;
+        // Check if the unit is null or empty
+        if(product.unit && product.unit.trim() !== "") {
+          document.getElementById("viewModalPrice").textContent = `CAD ${product.price}/${product.unit}`;
+        }
         document.getElementById(
           "viewModalPrice"
         ).textContent = `CAD ${product.price}`;
@@ -488,6 +492,9 @@
                       <p>${product.small_details}</p>
                     `;
                 } else {
+                    if(product.unit && product.unit.trim() !== "") {
+                        product.price = `${product.price}/${product.unit}`;
+                    }
                     productCard.innerHTML = `
                       ${
                         product.image_path
