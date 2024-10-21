@@ -5,7 +5,7 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
     <title>Manage Products</title>
     <link rel="stylesheet" href="../css/header.css"/>
-    <link rel="stylesheet" href="../css/styles.css"/>
+    <link rel="stylesheet" href="../css/styles.css?v=2"/>
     <link rel="stylesheet" href="../css/footer.css"/>
     <style>
         /* General styling */
@@ -154,8 +154,9 @@
         </nav>
     </div>
 </header>
+<div id="loading" class="spinner" style="display: none;"></div>
 <main>
-    <section class="content">
+    <section class="content" id="mainDisplayArea">
         <div class="mainContent">
             <div class="content-area">
                 <div class="backPages">
@@ -439,6 +440,8 @@
 <script defer src="../js/scripts.js"></script>
 <script src="../js/config.js"></script>
 <script>
+    document.getElementById("mainDisplayArea").style.display = 'none';
+    document.getElementById('loading').style.display = 'block';
     async function loadCategories(categoryId) {
         const response = await fetch(API_CONFIG.getFullUrl("CATEGORIES"), {
             headers: API_CONFIG.getHeaders(),
@@ -564,6 +567,8 @@
             window.location.href = "./login.html";
         }
         const products = await response.json();
+        document.getElementById('loading').style.display = 'none';
+        document.getElementById("mainDisplayArea").style.display = 'block';
         const productTableBody = document.querySelector("#product-table tbody");
         productTableBody.innerHTML = "";
 
