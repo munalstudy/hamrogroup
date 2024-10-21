@@ -595,8 +595,11 @@
         products.forEach((product) => {
             const row = document.createElement("tr");
             // Check if the unit is not null and not empty
+            product.oldPrice = product.price;
             if (product.unit && product.unit.trim() !== "") {
                 product.price = product.price + "/" + product.unit;
+            } else {
+                product.unit = "";
             }
             row.innerHTML = `
                 <td>${product.category}</td>
@@ -605,7 +608,7 @@
                 <td>${product.price}</td>
                 <td>
                     <button class="view-btn" onclick="viewProduct(${product.id})">View</button>
-                    <button class="edit-btn" onclick="editProduct(${product.id}, '${product.name}', ${product.categoryId}, '${product.category}', ${product.subcategoryId}, '${product.subcategory}', ${product.price}, '${product.unit}', '${product.small_details}', '${product.big_description}', '${product.image_path}')">Edit</button>
+                    <button class="edit-btn" onclick="editProduct(${product.id}, '${product.name}', ${product.categoryId}, '${product.category}', ${product.subcategoryId}, '${product.subcategory}', ${product.oldPrice}, '${product.unit}', '${product.small_details}', '${product.big_description}', '${product.image_path}')">Edit</button>
                     <button class="delete-btn" onclick="deleteProduct(${product.id})">Delete</button>
                 </td>
             `;
@@ -684,6 +687,7 @@
         subcategoryId,
         subcategory,
         price,
+        unit,
         smallDetails,
         bigDescription,
         imagePath
@@ -696,6 +700,7 @@
         document.getElementById("add-edit-category").value = categoryId;
         document.getElementById("add-edit-subcategory").value = subcategoryId;
         document.getElementById("edit-price").value = price;
+        document.getElementById("edit-unit").value = unit;
         document.getElementById("edit-smallDetails").value = smallDetails;
         document.getElementById("edit-bigDescription").value = bigDescription;
         document.getElementById("edit-image").value = "";
