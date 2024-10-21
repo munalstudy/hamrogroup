@@ -19,7 +19,7 @@
     />
 
     <link rel="stylesheet" href="../css/header.css" />
-    <link rel="stylesheet" href="../css/styles.css" />
+    <link rel="stylesheet" href="../css/styles.css?v=2" />
     <link rel="stylesheet" href="../css/footer.css" />
     <link
       href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;700&display=swap"
@@ -183,6 +183,7 @@
       </div>
     </header>
 
+    <div id="loading" class="spinner" style="display: none;"></div>
     <main>
       <!-- View Product Modal -->
       <div id="viewModal" class="modal">
@@ -280,6 +281,8 @@
     <script defer src="../js/scripts.js"></script>
     <script src="../js/config.js"></script>
     <script>
+      document.getElementById("productContainer").style.display = 'none';
+      document.getElementById('loading').style.display = 'block';
       const viewModal = document.getElementById("viewModal");
       const viewModalClose = document.getElementById("viewModalClose");
 
@@ -408,6 +411,9 @@
           headers: API_CONFIG.getHeaders(),
         });
         const products = await response.json();
+
+          document.getElementById('loading').style.display = 'none';
+          document.getElementById("productContainer").style.display = 'block';
 
         const productContainer = document.getElementById("productContainer");
         const searchInput = document.getElementById("searchInput");
