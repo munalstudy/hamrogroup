@@ -200,7 +200,7 @@
               <strong>Name:</strong>
               <span id="viewModalName"></span>
             </p>
-            <p class="modal-text">
+            <p class="modal-text" id="priceModal">
               <strong>Price:</strong>
               <span id="viewModalPrice"></span>
             </p>
@@ -314,6 +314,9 @@
         document.getElementById(
           "viewModalPrice"
         ).textContent = `CAD ${product.price}`;
+        if(product.price === "0.00") {
+          document.getElementById("priceModal").style.display = "none";
+        }
         document.getElementById("viewModalSmallDetails").textContent =
           product.small_details;
         document.getElementById("viewModalDetails").textContent =
@@ -468,17 +471,28 @@
               subItems.forEach((product) => {
                 const productCard = document.createElement("div");
                 productCard.classList.add("product-card");
-                productCard.innerHTML = `
-                  ${
-                    product.image_path
-                      ? `<img src="${product.image_path}" alt="${product.name}" loading="lazy"/>`
-                      : ""
-                  }
-                  <h4>${product.name}</h4>
-                  <p>${product.small_details}</p>
-                  <p>CAD ${product.price}</p>
-                `;
-
+                if(product.price === "0.00") {
+                    productCard.innerHTML = `
+                      ${
+                        product.image_path
+                            ? `<img src="${product.image_path}" alt="${product.name}" loading="lazy"/>`
+                            : ""
+                    }
+                      <h4>${product.name}</h4>
+                      <p>${product.small_details}</p>
+                    `;
+                } else {
+                    productCard.innerHTML = `
+                      ${
+                        product.image_path
+                          ? `<img src="${product.image_path}" alt="${product.name}" loading="lazy"/>`
+                          : ""
+                      }
+                      <h4>${product.name}</h4>
+                      <p>${product.small_details}</p>
+                      <p>CAD ${product.price}</p>
+                    `;
+                }
                 // Add click event to show modal
                 productCard.addEventListener("click", () =>
                   showProductModal(product)
